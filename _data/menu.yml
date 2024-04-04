@@ -2,12 +2,18 @@
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 entries:
-  - title: info
+  - title: about
     entries:
-      - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
-      - title: github repo
-        url: https://github.com/riggraz/no-style-please
-      - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
+      - title: I work on digital inclusion, digital commmons,open data, open source, product management and digital strategy as a freelance consultant. 
+      - title: Currently based in Kigali, Rwanda <span class="ioda">🇷🇼</span>
+      - title: Linkedin profile
+        url: https://www.linkedin.com/in/pierrelouisrolle/?locale=en_US
+      - title: "you can reach me by <a href='mailto:plrolle@pm.me'>mail</a> or <a href='https://cal.com/prolle/30min'>book directly a meeting</a>"
+
+  - title: last two positions
+    entries:
+      - title: Advisor to the Minister for Digital Affairs of France (2023-2024)
+      - title: Director for Digital Strategy and Innovation, National Agency for Territorial Cohesion (2020-2023)
 
   - title: all posts
     post_list:
@@ -15,24 +21,3 @@ entries:
       show_more: true
       show_more_text: See archive...
       show_more_url: archive.html
-
-  - title: posts by category
-    post_list:
-      category: example2
-      show_more: true
-      show_more_text: See more posts...
-      show_more_url: example2-archive.html
-
-  - title: rss
-    url: feed.xml
-  
-  - title: another list
-    entries:
-      - title: with subitems
-        entries:
-          - title: with subsubitems
-          - title: example page
-            url: about
-  - title: PRO TIP
-    entries:
-      - title: to edit this menu, edit _data/menu.yml file
