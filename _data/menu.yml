@@ -4,13 +4,12 @@
 entries:
   - title: about
     entries:
-      - title: I co-founded the consultancy collective PLURALL.CC 
-        url: https://www.plurall.cc 
+      - title: I co-founded the consultancy collective <a href='https://www.plurall.cc'>PLURALL.CC</a>.
       - title: I work on policy strategy, digital skills & inclusion, digital infrastructures & public goods.  
       - title: Currently based in Kigali, Rwanda. <span class="ioda">🇷🇼</span>
-      - title: Linkedin profile
+      - title: Linkedin profile.
         url: https://www.linkedin.com/in/pierrelouisrolle/?locale=en_US
-      - title: "you can reach me by <a href='mailto:plrolle@pm.me'>mail</a> or <a href='https://cal.com/prolle/30min'>book directly a meeting</a>."
+      - title: "You can reach me by <a href='mailto:plrolle@pm.me'>mail</a> or <a href='https://cal.com/prolle/30min'>book directly a meeting</a>."
 
   - title: last two positions
     entries:
