@@ -75,26 +75,6 @@
       }
       .tag-pill:hover { opacity: 0.7; }
 
-      .more-row-btn {
-        display: none;
-        flex-shrink: 0;
-        align-self: flex-start;
-        background: none;
-        border: 1.5px dashed black;
-        padding: 0.2rem 0.6rem;
-        font-size: 0.75rem;
-        font-family: monospace;
-        cursor: pointer;
-        white-space: nowrap;
-        opacity: 0.6;
-      }
-      .more-row-btn:hover { opacity: 1; }
-      .more-row-btn.open { opacity: 1; border-style: solid; }
-
-      #topicPills:not(.expanded) {
-        max-height: 2.2rem;
-        overflow: hidden;
-      }
 
       /* ── Active filters summary ── */
       .active-filters-bar {
@@ -383,7 +363,6 @@
             <button class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</button>
             {% endfor %}
           </div>
-          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleRowExpand('topicPills','topicMoreBtn')">+ filters</button>
         </div>
         {% endif %}
 
@@ -591,36 +570,7 @@
         bar.appendChild(clearAll);
       }
 
-      // ── Topics row expand / collapse ──────────────────────────────────────
-      function toggleRowExpand(pillsId, btnId) {
-        const pills = document.getElementById(pillsId);
-        const btn   = document.getElementById(btnId);
-        const expanded = pills.classList.toggle('expanded');
-        btn.classList.toggle('open', expanded);
-        btn.textContent = expanded ? '− less' : '+ more';
-      }
-
-      function expandTopics() {
-        const pills = document.getElementById('topicPills');
-        const btn   = document.getElementById('topicMoreBtn');
-        if (pills && !pills.classList.contains('expanded')) {
-          pills.classList.add('expanded');
-          if (btn) { btn.classList.add('open'); btn.textContent = '− less'; }
-        }
-      }
-
-      function checkTopicsOverflow() {
-        const pills = document.getElementById('topicPills');
-        const btn   = document.getElementById('topicMoreBtn');
-        if (!pills || !btn) return;
-        if (pills.classList.contains('expanded')) { btn.style.display = 'inline-block'; return; }
-        requestAnimationFrame(() => {
-          btn.style.display = pills.scrollHeight > pills.clientHeight + 2 ? 'inline-block' : 'none';
-        });
-      }
-
-      window.addEventListener('resize', checkTopicsOverflow);
-      setTimeout(checkTopicsOverflow, 0);
+      function expandTopics() {} // no-op, kept for filterTag compatibility
 
       // ── Admin mode (token in localStorage) ───────────────────────────────
       if (localStorage.getItem('ghToken')) {
