@@ -239,6 +239,22 @@
         font-size: 0.9rem;
         line-height: 1.5;
       }
+
+      .link-comment {
+        border-left: 2px solid black;
+        padding: 0.25rem 0 0.25rem 0.65rem;
+        margin: 0.6rem 0 0.4rem;
+        font-family: monospace;
+        font-size: 0.82rem;
+        line-height: 1.45;
+      }
+      .link-comment::before {
+        content: '// ';
+        opacity: 0.4;
+      }
+      .link-entry:hover .link-comment {
+        border-left-color: white;
+      }
       .link-meta {
         display: flex;
         justify-content: space-between;
@@ -407,6 +423,10 @@
 
             {% if link.summary %}
             <p class="link-summary">{{ link.summary }}</p>
+            {% endif %}
+
+            {% if link.comment %}
+            <p class="link-comment">{{ link.comment }}</p>
             {% endif %}
 
             <div class="link-meta">

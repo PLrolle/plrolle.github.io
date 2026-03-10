@@ -186,6 +186,8 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
       <textarea class="__lc_textarea" id="__lc_desc">${ogDesc}</textarea>
       <label class="__lc_label">category</label>
       <select class="__lc_select" id="__lc_category">${catOptions}</select>
+      <label class="__lc_label">your note <span style="opacity:0.45;font-weight:normal;text-transform:none">(optional)</span></label>
+      <textarea class="__lc_textarea" id="__lc_comment" placeholder="why does this matter..."></textarea>
       <label class="__lc_label">tags (press Enter to confirm)</label>
       <div class="__lc_tags" id="__lc_tags" onclick="document.getElementById('__lc_tagInput').focus()">
         <input class="__lc_tag_input" id="__lc_tagInput" placeholder="commons, ai, policy...">
@@ -246,6 +248,7 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
     const title    = document.getElementById('__lc_title').value.trim();
     const summary  = document.getElementById('__lc_desc').value.trim();
     const category = document.getElementById('__lc_category').value;
+    const comment  = document.getElementById('__lc_comment').value.trim();
     if (!title) return showStatus('title is required.', 'err');
 
     this.disabled = true;
@@ -274,6 +277,7 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
         tags: tags
       };
       if (category) entry.category = category;
+      if (comment)  entry.comment  = comment;
 
       links.unshift(entry);
 
