@@ -1,0 +1,2 @@
+#!/bin/sh
+/opt/node22/bin/node "$(dirname "$0")/scripts/digest.js" "$@"
