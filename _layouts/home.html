@@ -65,6 +65,13 @@ layout: default
 
 <hr>
 
+<div class="home-ctas" style="margin-bottom: 0.5rem;">
+  <a href="{{ '/posts.html' | relative_url }}" class="home-cta">
+    <span class="home-cta-title">/posts</span>
+    <span class="home-cta-desc">Notes, digests and occasional longer pieces</span>
+  </a>
+</div>
+
 {% assign posts = site.posts %}
 {% if posts.size > 0 %}
   <ul>
