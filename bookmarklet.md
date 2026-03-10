@@ -116,7 +116,7 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
       width:100%;border:1px solid black;padding:0.3rem 0.4rem;
       background:white;color:black;font-size:12px;
     }
-    .__lc_textarea { min-height:60px;max-height:100px;resize:vertical; }
+    .__lc_textarea { min-height:40px;max-height:80px;resize:vertical; }
     .__lc_select { cursor:pointer; }
     .__lc_tags {
       display:flex;flex-wrap:wrap;gap:0.3rem;
@@ -180,10 +180,9 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
     <div id="__lc_body">
       <div class="__lc_url" id="__lc_url">${pageUrl}</div>
       ${ogImage ? `<img class="__lc_og_img" src="${ogImage}" alt="">` : ''}
+      <input type="hidden" id="__lc_desc" value="${ogDesc.replace(/"/g,'&quot;')}">
       <label class="__lc_label">title</label>
       <input class="__lc_input" id="__lc_title" value="${ogTitle.replace(/"/g,'&quot;')}">
-      <label class="__lc_label">description</label>
-      <textarea class="__lc_textarea" id="__lc_desc">${ogDesc}</textarea>
       <label class="__lc_label">category</label>
       <select class="__lc_select" id="__lc_category">${catOptions}</select>
       <label class="__lc_label">your note <span style="opacity:0.45;font-weight:normal;text-transform:none">(optional)</span></label>
