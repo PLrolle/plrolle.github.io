@@ -106,12 +106,12 @@ async function main() {
   const wNum    = weekNumber(monday);
   const year    = monday.getUTCFullYear();
 
+  // Preserve insertion order (unshift = most recent first in file)
   const weekLinks = links
     .filter(l => {
       const d = new Date(l.date);
       return d >= monday && d <= sunday;
-    })
-    .sort((a, b) => new Date(b.added_at) - new Date(a.added_at));
+    });
 
   if (weekLinks.length === 0) {
     console.error(`No links found for week ${wNum} (${isoDate(monday)} → ${isoDate(sunday)})`);
