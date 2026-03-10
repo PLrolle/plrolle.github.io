@@ -26,12 +26,15 @@ layout: default
     margin-bottom: 0.2rem;
   }
   .home-cta-desc {
+    font-family: monospace;
     font-size: 0.8rem;
     opacity: 0.6;
     display: block;
-    font-style: italic;
     line-height: 1.4;
   }
+  /* ── About/menu section matches CTA font size ── */
+  .home-menu ul { margin: 0.4rem 0; }
+  .home-menu li { font-size: 0.85rem; }
   .home-cta:hover .home-cta-desc { opacity: 0.85; }
 
   @media (max-width: 520px) {
@@ -61,7 +64,11 @@ layout: default
   </a>
 </div>
 
+<hr>
+
+<div class="home-menu">
 {%-include menu_item.html collection=site.data.menu.entries-%}
+</div>
 
 <hr>
 
