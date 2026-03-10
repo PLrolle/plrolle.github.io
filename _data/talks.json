@@ -38,7 +38,8 @@
     "month_label": "Oct",
     "sort_key": 202310,
     "category": "press",
-    "title": "Cahier spécial Le Monde — Communs numériques — « Les communs, ça s'entretient, sinon ça s'étiole »",
+    "featured": true,
+    "title": "« Les communs, ça s'entretient, sinon ça s'étiole »",
     "organization": "Le Monde",
     "url": "https://storage.lesbases.anct.gouv.fr/main/user/abcd8ff8-8c48-4c5b-ac66-11b8231b464d/zUo1R7EU5FvwftuRlnPfj_Supp%204%20pages%20ANCT%2019&20%20octobre%20(2).pdf",
     "themes": ["digital-commons"]
@@ -48,7 +49,6 @@
     "year": 2023,
     "month_label": "Oct",
     "sort_key": 202310,
-    "featured": true,
     "category": "talks",
     "title": "NEC 2023 — Plénière de lancement — Avec L. Rojey, O. Polovynko (Kyiv), S. Schaer (DINUM), S. Soriano (IGN), J.-N. Barrot (Ministre)",
     "organization": "Numérique en Commun[s]",
