@@ -266,18 +266,6 @@
     "themes": ["data", "open-source", "ai"]
   },
   {
-    "id": "nec2021-interview",
-    "year": 2021,
-    "month_label": "Oct",
-    "sort_key": 202110,
-    "category": "interviews",
-    "country": "france",
-    "title": "NEC 2021 — Interview, directeur du programme Inclusion numérique ANCT",
-    "organization": "ANCT",
-    "url": "https://anctv.anct.gouv.fr/acces-aux-services-public-et-au-numerique/197d786d00.html",
-    "themes": ["inclusion"]
-  },
-  {
     "id": "jit-2021",
     "year": 2021,
     "month_label": "Sep",
