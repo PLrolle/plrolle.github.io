@@ -152,21 +152,9 @@
     "sort_key": 202303,
     "category": "talks",
     "country": "france",
-    "title": "Forum des Interconnectés 2023 — Plénière inclusion numérique + table ronde France Numérique Ensemble",
+    "title": "Forum des Interconnectés 2023 — Plénière d'ouverture + table ronde France Numérique Ensemble",
     "organization": "Les Interconnectés, Toulouse",
     "url": "https://www.evenements.interconnectes.com/forum2023/speaker/073a7535-3fb8-ed11-994c-000d3a469307/pierre-louis-rolle",
-    "themes": ["inclusion"]
-  },
-  {
-    "id": "csnp-2022",
-    "year": 2022,
-    "month_label": "Dec",
-    "sort_key": 202212,
-    "category": "official",
-    "country": "france",
-    "title": "Avis CSNP n°2022-08 sur le bilan des conseillers numériques — Auditionné comme Dir. Stratégie & Innovation, ANCT",
-    "organization": "CSNP",
-    "url": "https://csnp.fr/wp-content/uploads/2022/12/Avis-n%C2%B02022-08-du-14-decembre-2022-sur-le-bilan-des-conseillers-numeriques.pdf",
     "themes": ["inclusion", "data"]
   },
   {
@@ -204,18 +192,6 @@
     "organization": "France Tiers-Lieux",
     "url": "https://www.youtube.com/watch?app=desktop&v=8sN8Iruchuc",
     "themes": ["third-places"]
-  },
-  {
-    "id": "cnr-contrib-2022",
-    "year": 2022,
-    "month_label": "Sep",
-    "sort_key": 202209,
-    "category": "official",
-    "country": "france",
-    "title": "Contributions et commentaires — CNR Numérique (plateforme de concertation) — Inclusion numérique, conseillers numériques",
-    "organization": "CNR Numérique / ANCT",
-    "url": "https://cnr-numerique.anct.gouv.fr/profiles/pierre-louis_rolle/activity?locale=fr",
-    "themes": ["inclusion", "civic-tech"]
   },
   {
     "id": "nec2022-pleniere",
@@ -260,8 +236,8 @@
     "sort_key": 202202,
     "category": "talks",
     "country": "france",
-    "title": "UN Habitat / URBACT Flagship Programme — « Sustainable, human-centred digital transitions » (Strasbourg)",
-    "organization": "UN Habitat / URBACT",
+    "title": "Villes intelligentes inclusives — Table ronde : Nouvelles Pratiques (Strasbourg)",
+    "organization": "Présidence française du Conseil de l'Union européenne",
     "url": "https://fnau.org/wp-content/uploads/2022/01/flagship-programme-strasbourg-2-fevrier-2022-vf-39.pdf",
     "themes": ["inclusion", "digital-commons"]
   },
@@ -288,18 +264,6 @@
     "organization": "DINUM / numerique.gouv.fr",
     "url": "https://www.numerique.gouv.fr/actualites/donnees-algorithmes-codes-sources-mobilisation-generale-sans-precedent-15-feuilles-de-route-ministerielles/",
     "themes": ["data", "open-source", "ai"]
-  },
-  {
-    "id": "nec2021-interview",
-    "year": 2021,
-    "month_label": "Oct",
-    "sort_key": 202110,
-    "category": "interviews",
-    "country": "france",
-    "title": "NEC 2021 — Interview, directeur du programme Inclusion numérique ANCT",
-    "organization": "ANCT",
-    "url": "https://anctv.anct.gouv.fr/acces-aux-services-public-et-au-numerique/197d786d00.html",
-    "themes": ["inclusion"]
   },
   {
     "id": "jit-2021",
