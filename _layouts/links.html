@@ -17,16 +17,34 @@
         margin-bottom: 1.5rem;
       }
 
-      .filter-row-primary {
+      .filter-row {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 0.25rem;
-        scrollbar-width: none;
+        margin-bottom: 0.4rem;
+        min-width: 0;
       }
-      .filter-row-primary::-webkit-scrollbar { display: none; }
+      .filter-row-label {
+        font-family: monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.45;
+        white-space: nowrap;
+        flex-shrink: 0;
+        width: 4.5rem;
+      }
+      .filter-row-pills {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: nowrap;
+        overflow: hidden;
+      }
+      .filter-row-pills.expanded {
+        flex-wrap: wrap;
+      }
 
       .cat-pill {
         flex-shrink: 0;
@@ -43,7 +61,26 @@
       .cat-pill:hover { background: #eee; }
       .cat-pill.active { background: black; color: white; }
 
-      .toggle-more-btn {
+      .tag-pill {
+        flex-shrink: 0;
+        background: black;
+        color: white;
+        padding: 0.15rem 0.45rem;
+        cursor: pointer;
+        font-family: monospace;
+        font-size: 0.75rem;
+        border: none;
+        white-space: nowrap;
+      }
+      .tag-pill.active {
+        outline: 2px solid black;
+        background: white;
+        color: black;
+      }
+      .tag-pill:hover { opacity: 0.7; }
+
+      .more-row-btn {
+        display: none;
         flex-shrink: 0;
         background: none;
         border: 1.5px dashed black;
@@ -53,67 +90,9 @@
         cursor: pointer;
         white-space: nowrap;
         opacity: 0.6;
-        margin-left: auto;
       }
-      .toggle-more-btn:hover { opacity: 1; }
-      .toggle-more-btn.open { opacity: 1; border-style: solid; }
-
-      .more-filters {
-        margin-top: 0.75rem;
-        padding: 0.75rem;
-        border: 1px solid black;
-        display: none;
-      }
-      .more-filters.open { display: block; }
-
-      .more-filters-inner {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-
-      .filter-block { flex: 1; min-width: 200px; }
-      .filter-block-title {
-        font-size: 0.7rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin: 0 0 0.4rem;
-        opacity: 0.6;
-      }
-
-      .tag-filter-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.3rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      .tag-pill {
-        background: black;
-        color: white;
-        padding: 0.1rem 0.4rem;
-        cursor: pointer;
-        font-family: monospace;
-        font-size: 0.75rem;
-        border: none;
-      }
-      .tag-pill.active {
-        outline: 2px solid black;
-        background: white;
-        color: black;
-      }
-      .tag-pill:hover { opacity: 0.7; }
-
-      .period-select {
-        border: 1.5px solid black;
-        padding: 0.25rem 0.4rem;
-        font-family: monospace;
-        font-size: 0.8rem;
-        background: white;
-        cursor: pointer;
-      }
+      .more-row-btn:hover { opacity: 1; }
+      .more-row-btn.open { opacity: 1; border-style: solid; }
 
       /* ── Active filters summary ── */
       .active-filters-bar {
@@ -129,16 +108,24 @@
         display: flex;
         align-items: center;
         gap: 0.3rem;
-        background: black;
-        color: white;
         padding: 0.1rem 0.4rem;
         font-family: monospace;
         font-size: 0.75rem;
       }
+      .active-filter-chip.is-medium {
+        background: white;
+        color: black;
+        border: 1.5px solid black;
+      }
+      .active-filter-chip.is-medium button { color: black; }
+      .active-filter-chip.is-topic {
+        background: black;
+        color: white;
+      }
+      .active-filter-chip.is-topic button { color: white; }
       .active-filter-chip button {
         background: none;
         border: none;
-        color: white;
         cursor: pointer;
         font-size: 1rem;
         padding: 0;
@@ -154,6 +141,20 @@
         opacity: 0.6;
       }
       .clear-all-btn:hover { opacity: 1; }
+
+      /* ── Dark mode ── */
+      @media (prefers-color-scheme: dark) {
+        .cat-pill { background: black; color: white; border-color: white; }
+        .cat-pill:hover { background: #222; }
+        .cat-pill.active { background: white; color: black; }
+        .tag-pill { background: white; color: black; }
+        .tag-pill.active { outline-color: white; background: black; color: white; }
+        .more-row-btn { border-color: white; }
+        .active-filter-chip.is-medium { background: black; color: white; border-color: white; }
+        .active-filter-chip.is-medium button { color: white; }
+        .active-filter-chip.is-topic { background: white; color: black; }
+        .active-filter-chip.is-topic button { color: black; }
+      }
 
       /* ── Count ── */
       .links-count {
@@ -315,8 +316,7 @@
 
       /* ── Mobile ── */
       @media (max-width: 600px) {
-        .more-filters-inner { flex-direction: column; gap: 0.75rem; }
-        .filter-block { min-width: unset; }
+        .filter-row-label { width: 3.5rem; }
         .link-meta { flex-direction: column; align-items: flex-start; }
       }
     </style>
@@ -333,7 +333,7 @@
 
       <hr>
 
-      {% assign sorted_links = site.data.links | sort: "date" | reverse %}
+      {% assign sorted_links = site.data.links | sort: "added_at" | reverse %}
 
       {% assign all_tags = "" | split: "" %}
       {% assign all_categories = "" | split: "" %}
@@ -359,42 +359,32 @@
 
       <!-- ── Filter toolbar ── -->
       <div class="filters-toolbar">
-        <div class="filter-row-primary">
-          <button class="cat-pill active" data-cat="all" onclick="filterCat('all')">All</button>
-          {% for cat in all_categories %}
-          <button class="cat-pill" data-cat="{{ cat }}" onclick="filterCat('{{ cat }}')">
-            <span class="cat-label-{{ cat }}">{{ cat }}</span>
-          </button>
-          {% endfor %}
-          <button class="toggle-more-btn" id="toggleMoreBtn" onclick="toggleMore()">+ filters</button>
-        </div>
-
-        <div class="more-filters" id="moreFilters">
-          <div class="more-filters-inner">
-            {% if all_tags.size > 0 %}
-            <div class="filter-block">
-              <p class="filter-block-title">Tags</p>
-              <ul class="tag-filter-list" id="tagFilterList">
-                {% for tag in all_tags %}
-                <li class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
-
-            {% if all_periods.size > 1 %}
-            <div class="filter-block">
-              <p class="filter-block-title">Period</p>
-              <select class="period-select" id="periodFilter" onchange="filterPeriod(this.value)">
-                <option value="">All periods</option>
-                {% for p in all_periods %}
-                <option value="{{ p }}">{{ p | date: "%B %Y" }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            {% endif %}
+        <!-- Medium row -->
+        <div class="filter-row">
+          <span class="filter-row-label">Medium</span>
+          <div class="filter-row-pills" id="mediumPills">
+            <button class="cat-pill active" data-cat="all" onclick="filterCat('all')">All</button>
+            {% for cat in all_categories %}
+            <button class="cat-pill" data-cat="{{ cat }}" onclick="filterCat('{{ cat }}')">
+              <span class="cat-label-{{ cat }}">{{ cat }}</span>
+            </button>
+            {% endfor %}
           </div>
+          <button class="more-row-btn" id="mediumMoreBtn" onclick="toggleRowExpand('mediumPills','mediumMoreBtn')">+ filters</button>
         </div>
+
+        <!-- Topics row -->
+        {% if all_tags.size > 0 %}
+        <div class="filter-row">
+          <span class="filter-row-label">Topics</span>
+          <div class="filter-row-pills" id="topicPills">
+            {% for tag in all_tags %}
+            <button class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</button>
+            {% endfor %}
+          </div>
+          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleRowExpand('topicPills','topicMoreBtn')">+ filters</button>
+        </div>
+        {% endif %}
 
         <div class="active-filters-bar" id="activeFiltersBar"></div>
       </div>
@@ -499,27 +489,24 @@
 
       // ── Filter state ─────────────────────────────────────────────────────
       let activeCategory = 'all';
-      let activeTag      = null;
-      let activePeriod   = '';
+      let activeTags     = new Set();
 
       // ── Core filter logic ─────────────────────────────────────────────────
       function applyFilters() {
-        const entries  = document.querySelectorAll('.link-entry');
-        const groups   = document.querySelectorAll('.week-group');
-        const countEl  = document.getElementById('linksCount');
-        const noRes    = document.getElementById('noResults');
+        const entries = document.querySelectorAll('.link-entry');
+        const groups  = document.querySelectorAll('.week-group');
+        const countEl = document.getElementById('linksCount');
+        const noRes   = document.getElementById('noResults');
 
         let visible = 0;
         entries.forEach(el => {
-          const cat    = el.dataset.category || '';
-          const tags   = el.dataset.tags ? el.dataset.tags.split(',').filter(Boolean) : [];
-          const period = el.dataset.period || '';
+          const cat  = el.dataset.category || '';
+          const tags = el.dataset.tags ? el.dataset.tags.split(',').filter(Boolean) : [];
 
-          const catOk    = activeCategory === 'all' || cat === activeCategory;
-          const tagOk    = activeTag === null || tags.includes(activeTag);
-          const periodOk = activePeriod === '' || period === activePeriod;
+          const catOk = activeCategory === 'all' || cat === activeCategory;
+          const tagOk = activeTags.size === 0 || tags.some(t => activeTags.has(t));
 
-          const show = catOk && tagOk && periodOk;
+          const show = catOk && tagOk;
           el.style.display = show ? '' : 'none';
           if (show) visible++;
         });
@@ -545,31 +532,23 @@
       }
 
       function filterTag(tag) {
-        if (activeTag === tag) {
-          activeTag = null;
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
         } else {
-          activeTag = tag;
+          activeTags.add(tag);
         }
         document.querySelectorAll('.tag-pill').forEach(el => {
-          el.classList.toggle('active', el.dataset.tag === activeTag);
+          el.classList.toggle('active', activeTags.has(el.dataset.tag));
         });
-        applyFilters();
-      }
-
-      function filterPeriod(val) {
-        activePeriod = val;
         applyFilters();
       }
 
       function clearAllFilters() {
         activeCategory = 'all';
-        activeTag = null;
-        activePeriod = '';
+        activeTags = new Set();
         document.querySelectorAll('.cat-pill').forEach(el =>
           el.classList.toggle('active', el.dataset.cat === 'all'));
         document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
-        const ps = document.getElementById('periodFilter');
-        if (ps) ps.value = '';
         applyFilters();
       }
 
@@ -580,16 +559,11 @@
         const chips = [];
 
         if (activeCategory !== 'all') {
-          chips.push({ label: CAT_LABELS[activeCategory] || activeCategory, clear: () => filterCat('all') });
+          chips.push({ label: CAT_LABELS[activeCategory] || activeCategory, type: 'medium', clear: () => filterCat('all') });
         }
-        if (activeTag) {
-          chips.push({ label: '#' + activeTag, clear: () => filterTag(activeTag) });
-        }
-        if (activePeriod) {
-          const d = new Date(activePeriod + '-01');
-          const label = d.toLocaleString('en', { month: 'long', year: 'numeric' });
-          chips.push({ label, clear: () => { activePeriod = ''; const ps = document.getElementById('periodFilter'); if (ps) ps.value = ''; applyFilters(); } });
-        }
+        activeTags.forEach(tag => {
+          chips.push({ label: '#' + tag, type: 'topic', clear: () => filterTag(tag) });
+        });
 
         if (chips.length === 0) {
           bar.classList.remove('visible');
@@ -599,7 +573,7 @@
 
         chips.forEach(chip => {
           const el = document.createElement('span');
-          el.className = 'active-filter-chip';
+          el.className = 'active-filter-chip is-' + chip.type;
           const btn = document.createElement('button');
           btn.textContent = '×';
           btn.onclick = chip.clear;
@@ -615,14 +589,31 @@
         bar.appendChild(clearAll);
       }
 
-      // ── More filters toggle ───────────────────────────────────────────────
-      function toggleMore() {
-        const panel = document.getElementById('moreFilters');
-        const btn   = document.getElementById('toggleMoreBtn');
-        const open  = panel.classList.toggle('open');
-        btn.classList.toggle('open', open);
-        btn.textContent = open ? '− filters' : '+ filters';
+      // ── Row expand + overflow detection ──────────────────────────────────
+      function toggleRowExpand(pillsId, btnId) {
+        const pills = document.getElementById(pillsId);
+        const btn   = document.getElementById(btnId);
+        const expanded = pills.classList.toggle('expanded');
+        btn.classList.toggle('open', expanded);
+        btn.textContent = expanded ? '− filters' : '+ filters';
       }
+
+      function checkOverflow() {
+        [['mediumPills', 'mediumMoreBtn'], ['topicPills', 'topicMoreBtn']].forEach(([pillsId, btnId]) => {
+          const pills = document.getElementById(pillsId);
+          const btn   = document.getElementById(btnId);
+          if (!pills || !btn) return;
+          if (pills.classList.contains('expanded')) { btn.style.display = ''; return; }
+          btn.style.display = 'none';
+          requestAnimationFrame(() => {
+            const overflows = pills.scrollWidth > pills.clientWidth;
+            btn.style.display = overflows ? '' : 'none';
+          });
+        });
+      }
+
+      window.addEventListener('resize', checkOverflow);
+      setTimeout(checkOverflow, 0);
 
       // ── Admin mode (token in localStorage) ───────────────────────────────
       if (localStorage.getItem('ghToken')) {

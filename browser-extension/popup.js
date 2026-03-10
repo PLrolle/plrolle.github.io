@@ -159,6 +159,7 @@ async function saveLink() {
       source_name:    currentSourceName,
       source_favicon: currentFavicon,
       date:           new Date().toISOString().slice(0, 10),
+      added_at:       new Date().toISOString(),
       tags:           tags,
     };
 

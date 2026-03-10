@@ -273,6 +273,7 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
         source_name: ogSite,
         source_favicon: favicon,
         date: new Date().toISOString().slice(0,10),
+        added_at: new Date().toISOString(),
         tags: tags
       };
       if (category) entry.category = category;
