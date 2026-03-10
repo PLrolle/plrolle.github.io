@@ -1,30 +1,204 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: 'fr' }}" {{ site.theme_config.appearance | default: 'auto' | prepend: 'a="' | append: '"' }}>
+<html lang="en" {{ site.theme_config.appearance | default: 'auto' | prepend: 'a="' | append: '"' }}>
   <head>
     {% include head.html %}
     <style>
-      .links-feed {
-        margin-top: 2rem;
+      /* ── Page header ── */
+      .page-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.6;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+        font-style: italic;
       }
 
+      /* ── Filter toolbar ── */
+      .filters-toolbar {
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-row-primary {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        scrollbar-width: none;
+      }
+      .filter-row-primary::-webkit-scrollbar { display: none; }
+
+      .cat-pill {
+        flex-shrink: 0;
+        background: white;
+        color: black;
+        border: 1.5px solid black;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.1s;
+      }
+      .cat-pill:hover { background: #eee; }
+      .cat-pill.active { background: black; color: white; }
+
+      .toggle-more-btn {
+        flex-shrink: 0;
+        background: none;
+        border: 1.5px dashed black;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        cursor: pointer;
+        white-space: nowrap;
+        opacity: 0.6;
+        margin-left: auto;
+      }
+      .toggle-more-btn:hover { opacity: 1; }
+      .toggle-more-btn.open { opacity: 1; border-style: solid; }
+
+      .more-filters {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        border: 1px solid black;
+        display: none;
+      }
+      .more-filters.open { display: block; }
+
+      .more-filters-inner {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .filter-block { flex: 1; min-width: 200px; }
+      .filter-block-title {
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 0.4rem;
+        opacity: 0.6;
+      }
+
+      .tag-filter-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .tag-pill {
+        background: black;
+        color: white;
+        padding: 0.1rem 0.4rem;
+        cursor: pointer;
+        font-family: monospace;
+        font-size: 0.75rem;
+        border: none;
+      }
+      .tag-pill.active {
+        outline: 2px solid black;
+        background: white;
+        color: black;
+      }
+      .tag-pill:hover { opacity: 0.7; }
+
+      .period-select {
+        border: 1.5px solid black;
+        padding: 0.25rem 0.4rem;
+        font-family: monospace;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+      }
+
+      /* ── Active filters summary ── */
+      .active-filters-bar {
+        display: none;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.6rem;
+        font-size: 0.8rem;
+      }
+      .active-filters-bar.visible { display: flex; }
+      .active-filter-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: black;
+        color: white;
+        padding: 0.1rem 0.4rem;
+        font-family: monospace;
+        font-size: 0.75rem;
+      }
+      .active-filter-chip button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0;
+        line-height: 1;
+      }
+      .clear-all-btn {
+        font-family: monospace;
+        font-size: 0.75rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: underline;
+        opacity: 0.6;
+      }
+      .clear-all-btn:hover { opacity: 1; }
+
+      /* ── Count ── */
+      .links-count {
+        font-size: 0.8rem;
+        margin: 0.75rem 0 1.25rem;
+        opacity: 0.55;
+      }
+
+      /* ── Week groups ── */
+      .week-group { margin-bottom: 2.5rem; }
+
+      .week-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .week-label {
+        font-family: monospace;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.45;
+        white-space: nowrap;
+      }
+      .week-rule {
+        flex: 1;
+        height: 1px;
+        background: black;
+        opacity: 0.15;
+      }
+
+      /* ── Link entries ── */
       .link-entry {
         border: 2px solid black;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         padding: 1rem;
       }
-
       .link-entry:hover {
         background: black;
         color: white;
       }
-
-      .link-entry:hover a {
-        color: white;
-      }
-
-      .link-entry:hover .link-source {
-        color: white;
-      }
+      .link-entry:hover a { color: white; }
+      .link-entry:hover .link-source { color: white; }
 
       .link-header {
         display: flex;
@@ -32,7 +206,6 @@
         gap: 0.75rem;
         margin-bottom: 0.5rem;
       }
-
       .link-favicon {
         width: 16px;
         height: 16px;
@@ -40,116 +213,76 @@
         margin-top: 2px;
         image-rendering: pixelated;
       }
-
       .link-title {
         font-weight: bold;
         font-size: 1rem;
         line-height: 1.3;
       }
-
       .link-title a {
         text-decoration: none;
         border-bottom: 1px solid black;
       }
 
-      .link-title a:hover {
-        text-decoration: none;
+      .link-category {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.55;
+        margin-bottom: 0.4rem;
       }
+      .link-entry:hover .link-category { opacity: 0.8; }
 
       .link-summary {
-        margin: 0.5rem 0;
+        margin: 0.4rem 0 0.6rem;
         font-size: 0.9rem;
         line-height: 1.5;
       }
-
       .link-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-top: 0.75rem;
         font-size: 0.8rem;
+        flex-wrap: wrap;
+        gap: 0.4rem;
       }
-
-      .link-source {
-        opacity: 0.7;
-      }
+      .link-source { opacity: 0.6; }
 
       .link-tags {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.4rem;
         flex-wrap: wrap;
       }
-
       .link-tag {
         background: black;
         color: white;
         padding: 0 0.3rem;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         text-decoration: none;
         font-family: monospace;
+        cursor: pointer;
       }
+      .link-entry:hover .link-tag { background: white; color: black; }
+      .link-tag:hover { text-decoration: underline; }
 
-      .link-entry:hover .link-tag {
-        background: white;
-        color: black;
-      }
-
-      .link-tag:hover {
-        text-decoration: underline;
-      }
-
-      .tag-filter {
-        margin-bottom: 2rem;
-        padding: 1rem;
-        border: 1px solid black;
+      /* ── No results ── */
+      .no-results {
+        padding: 2rem;
+        border: 1px dashed black;
+        text-align: center;
+        display: none;
+        opacity: 0.6;
+        font-family: monospace;
         font-size: 0.85rem;
       }
 
-      .tag-filter-title {
-        margin: 0 0 0.5rem 0;
-        font-weight: bold;
-      }
-
-      .tag-filter-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .tag-filter-item {
-        display: inline-block;
-        background: black;
-        color: white;
-        padding: 0.1rem 0.4rem;
-        cursor: pointer;
-        font-family: monospace;
-        font-size: 0.8rem;
-      }
-
-      .tag-filter-item.active {
-        outline: 2px solid black;
-        background: white;
-        color: black;
-      }
-
-      .tag-filter-item:hover {
-        opacity: 0.7;
-      }
-
-      .links-count {
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-        opacity: 0.6;
-      }
-
-      .no-results {
-        padding: 2rem;
-        border: 1px solid black;
-        text-align: center;
-        display: none;
+      /* ── Mobile ── */
+      @media (max-width: 600px) {
+        .more-filters-inner { flex-direction: column; gap: 0.75rem; }
+        .filter-block { min-width: unset; }
+        .link-meta { flex-direction: column; align-items: flex-start; }
       }
     </style>
   </head>
@@ -159,105 +292,291 @@
       {% include back_link.html %}
 
       <h1>{{ page.title }}</h1>
-
       {% if page.description %}
-        <p>{{ page.description }}</p>
+        <p class="page-subtitle">{{ page.description }}</p>
       {% endif %}
 
       <hr>
 
-      {% assign all_links = site.data.links | sort: "date" | reverse %}
+      {% assign sorted_links = site.data.links | sort: "date" | reverse %}
+
       {% assign all_tags = "" | split: "" %}
-      {% for link in all_links %}
+      {% assign all_categories = "" | split: "" %}
+      {% assign all_periods = "" | split: "" %}
+
+      {% for link in sorted_links %}
         {% for tag in link.tags %}
           {% unless all_tags contains tag %}
             {% assign all_tags = all_tags | push: tag %}
           {% endunless %}
         {% endfor %}
+        {% if link.category %}
+          {% unless all_categories contains link.category %}
+            {% assign all_categories = all_categories | push: link.category %}
+          {% endunless %}
+        {% endif %}
+        {% assign period_key = link.date | date: "%Y-%m" %}
+        {% unless all_periods contains period_key %}
+          {% assign all_periods = all_periods | push: period_key %}
+        {% endunless %}
       {% endfor %}
       {% assign all_tags = all_tags | sort %}
 
-      {% if all_tags.size > 0 %}
-      <div class="tag-filter">
-        <p class="tag-filter-title">filtrer par tag :</p>
-        <ul class="tag-filter-list" id="tagFilters">
-          {% for tag in all_tags %}
-          <li class="tag-filter-item" data-tag="{{ tag }}" onclick="filterByTag('{{ tag }}')">{{ tag }}</li>
+      <!-- ── Filter toolbar ── -->
+      <div class="filters-toolbar">
+        <div class="filter-row-primary">
+          <button class="cat-pill active" data-cat="all" onclick="filterCat('all')">All</button>
+          {% for cat in all_categories %}
+          <button class="cat-pill" data-cat="{{ cat }}" onclick="filterCat('{{ cat }}')">
+            <span class="cat-label-{{ cat }}">{{ cat }}</span>
+          </button>
           {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
+          <button class="toggle-more-btn" id="toggleMoreBtn" onclick="toggleMore()">+ filters</button>
+        </div>
 
-      <div class="links-count" id="linksCount">{{ all_links.size }} lien{% if all_links.size > 1 %}s{% endif %}</div>
-
-      <div class="links-feed" id="linksFeed">
-        {% for link in all_links %}
-        <div class="link-entry" data-tags="{{ link.tags | join: ',' }}">
-          <div class="link-header">
-            {% if link.source_favicon %}
-            <img class="link-favicon" src="{{ link.source_favicon }}" alt="" loading="lazy">
-            {% endif %}
-            <div class="link-title">
-              <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a>
+        <div class="more-filters" id="moreFilters">
+          <div class="more-filters-inner">
+            {% if all_tags.size > 0 %}
+            <div class="filter-block">
+              <p class="filter-block-title">Tags</p>
+              <ul class="tag-filter-list" id="tagFilterList">
+                {% for tag in all_tags %}
+                <li class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</li>
+                {% endfor %}
+              </ul>
             </div>
-          </div>
+            {% endif %}
 
-          {% if link.summary %}
-          <p class="link-summary">{{ link.summary }}</p>
-          {% endif %}
-
-          <div class="link-meta">
-            <span class="link-source">{{ link.date }} — {{ link.source_name }}</span>
-            {% if link.tags.size > 0 %}
-            <div class="link-tags">
-              {% for tag in link.tags %}
-              <span class="link-tag" onclick="filterByTag('{{ tag }}')" style="cursor:pointer">#{{ tag }}</span>
-              {% endfor %}
+            {% if all_periods.size > 1 %}
+            <div class="filter-block">
+              <p class="filter-block-title">Period</p>
+              <select class="period-select" id="periodFilter" onchange="filterPeriod(this.value)">
+                <option value="">All periods</option>
+                {% for p in all_periods %}
+                <option value="{{ p }}">{{ p | date: "%B %Y" }}</option>
+                {% endfor %}
+              </select>
             </div>
             {% endif %}
           </div>
         </div>
+
+        <div class="active-filters-bar" id="activeFiltersBar"></div>
+      </div>
+
+      <div class="links-count" id="linksCount">{{ sorted_links.size }} link{% if sorted_links.size != 1 %}s{% endif %}</div>
+
+      <!-- ── Feed grouped by week ── -->
+      <div class="links-feed" id="linksFeed">
+        {% assign current_week = nil %}
+        {% assign section_open = false %}
+
+        {% for link in sorted_links %}
+          {% assign link_week = link.date | date: "%Y-%W" %}
+          {% assign link_period = link.date | date: "%Y-%m" %}
+
+          {% if link_week != current_week %}
+            {% if section_open %}</section>{% endif %}
+            {% assign current_week = link_week %}
+            {% assign section_open = true %}
+            <section class="week-group" data-week="{{ link_week }}">
+              <div class="week-header">
+                <span class="week-label">w.{{ link.date | date: "%W" }} &middot; {{ link.date | date: "%B %Y" }}</span>
+                <div class="week-rule"></div>
+              </div>
+          {% endif %}
+
+          <div class="link-entry"
+               data-tags="{{ link.tags | join: ',' }}"
+               data-category="{{ link.category | default: '' }}"
+               data-period="{{ link_period }}"
+               data-week="{{ link_week }}">
+
+            {% if link.category %}
+            <div class="link-category cat-label-{{ link.category }}">{{ link.category }}</div>
+            {% endif %}
+
+            <div class="link-header">
+              {% if link.source_favicon %}
+              <img class="link-favicon" src="{{ link.source_favicon }}" alt="" loading="lazy">
+              {% endif %}
+              <div class="link-title">
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a>
+              </div>
+            </div>
+
+            {% if link.summary %}
+            <p class="link-summary">{{ link.summary }}</p>
+            {% endif %}
+
+            <div class="link-meta">
+              <span class="link-source">{{ link.date }} — {{ link.source_name }}</span>
+              {% if link.tags.size > 0 %}
+              <div class="link-tags">
+                {% for tag in link.tags %}
+                <span class="link-tag" onclick="filterTag('{{ tag }}')">#{{ tag }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if forloop.last %}</section>{% endif %}
         {% endfor %}
       </div>
 
-      <div class="no-results" id="noResults">aucun lien pour ce tag.</div>
+      <div class="no-results" id="noResults">No links match the current filters.</div>
 
     </div>
 
     <script>
-      let activeTag = null;
+      // ── Category labels ──────────────────────────────────────────────────
+      const CAT_LABELS = {
+        'journalism':       'Journalism',
+        'opinion':          'Opinion & Essay',
+        'academic-paper':   'Academic Paper',
+        'research-report':  'Research & Report',
+        'podcast':          'Podcast',
+        'video':            'Video',
+        'long-read':        'Long Read',
+        'interview':        'Interview',
+        'tool-project':     'Tool & Project',
+        'data-viz':         'Data & Viz'
+      };
 
-      function filterByTag(tag) {
-        const entries = document.querySelectorAll('.link-entry');
-        const filterItems = document.querySelectorAll('.tag-filter-item');
-        const countEl = document.getElementById('linksCount');
-        const noResults = document.getElementById('noResults');
+      // Apply human-readable labels to category pills & entry badges
+      document.querySelectorAll('[class*="cat-label-"]').forEach(el => {
+        const cls = Array.from(el.classList).find(c => c.startsWith('cat-label-'));
+        if (!cls) return;
+        const slug = cls.replace('cat-label-', '');
+        if (CAT_LABELS[slug]) el.textContent = CAT_LABELS[slug];
+      });
 
-        if (activeTag === tag) {
-          activeTag = null;
-          filterItems.forEach(el => el.classList.remove('active'));
-          entries.forEach(el => el.style.display = '');
-          const total = entries.length;
-          countEl.textContent = total + ' lien' + (total > 1 ? 's' : '');
-          noResults.style.display = 'none';
-          return;
-        }
+      // ── Filter state ─────────────────────────────────────────────────────
+      let activeCategory = 'all';
+      let activeTag      = null;
+      let activePeriod   = '';
 
-        activeTag = tag;
-        filterItems.forEach(el => {
-          el.classList.toggle('active', el.dataset.tag === tag);
-        });
+      // ── Core filter logic ─────────────────────────────────────────────────
+      function applyFilters() {
+        const entries  = document.querySelectorAll('.link-entry');
+        const groups   = document.querySelectorAll('.week-group');
+        const countEl  = document.getElementById('linksCount');
+        const noRes    = document.getElementById('noResults');
 
         let visible = 0;
         entries.forEach(el => {
-          const tags = el.dataset.tags ? el.dataset.tags.split(',') : [];
-          const show = tags.includes(tag);
+          const cat    = el.dataset.category || '';
+          const tags   = el.dataset.tags ? el.dataset.tags.split(',').filter(Boolean) : [];
+          const period = el.dataset.period || '';
+
+          const catOk    = activeCategory === 'all' || cat === activeCategory;
+          const tagOk    = activeTag === null || tags.includes(activeTag);
+          const periodOk = activePeriod === '' || period === activePeriod;
+
+          const show = catOk && tagOk && periodOk;
           el.style.display = show ? '' : 'none';
           if (show) visible++;
         });
 
-        countEl.textContent = visible + ' lien' + (visible > 1 ? 's' : '') + ' — tag : #' + tag;
-        noResults.style.display = visible === 0 ? 'block' : 'none';
+        groups.forEach(group => {
+          const any = Array.from(group.querySelectorAll('.link-entry'))
+                           .some(e => e.style.display !== 'none');
+          group.style.display = any ? '' : 'none';
+        });
+
+        countEl.textContent = visible + ' link' + (visible !== 1 ? 's' : '');
+        noRes.style.display = visible === 0 ? 'block' : 'none';
+        updateActiveBar();
+      }
+
+      // ── Individual filter setters ─────────────────────────────────────────
+      function filterCat(cat) {
+        activeCategory = cat;
+        document.querySelectorAll('.cat-pill').forEach(el => {
+          el.classList.toggle('active', el.dataset.cat === cat);
+        });
+        applyFilters();
+      }
+
+      function filterTag(tag) {
+        if (activeTag === tag) {
+          activeTag = null;
+        } else {
+          activeTag = tag;
+        }
+        document.querySelectorAll('.tag-pill').forEach(el => {
+          el.classList.toggle('active', el.dataset.tag === activeTag);
+        });
+        applyFilters();
+      }
+
+      function filterPeriod(val) {
+        activePeriod = val;
+        applyFilters();
+      }
+
+      function clearAllFilters() {
+        activeCategory = 'all';
+        activeTag = null;
+        activePeriod = '';
+        document.querySelectorAll('.cat-pill').forEach(el =>
+          el.classList.toggle('active', el.dataset.cat === 'all'));
+        document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
+        const ps = document.getElementById('periodFilter');
+        if (ps) ps.value = '';
+        applyFilters();
+      }
+
+      // ── Active filters summary bar ────────────────────────────────────────
+      function updateActiveBar() {
+        const bar = document.getElementById('activeFiltersBar');
+        bar.innerHTML = '';
+        const chips = [];
+
+        if (activeCategory !== 'all') {
+          chips.push({ label: CAT_LABELS[activeCategory] || activeCategory, clear: () => filterCat('all') });
+        }
+        if (activeTag) {
+          chips.push({ label: '#' + activeTag, clear: () => filterTag(activeTag) });
+        }
+        if (activePeriod) {
+          const d = new Date(activePeriod + '-01');
+          const label = d.toLocaleString('en', { month: 'long', year: 'numeric' });
+          chips.push({ label, clear: () => { activePeriod = ''; const ps = document.getElementById('periodFilter'); if (ps) ps.value = ''; applyFilters(); } });
+        }
+
+        if (chips.length === 0) {
+          bar.classList.remove('visible');
+          return;
+        }
+        bar.classList.add('visible');
+
+        chips.forEach(chip => {
+          const el = document.createElement('span');
+          el.className = 'active-filter-chip';
+          const btn = document.createElement('button');
+          btn.textContent = '×';
+          btn.onclick = chip.clear;
+          el.appendChild(document.createTextNode(chip.label));
+          el.appendChild(btn);
+          bar.appendChild(el);
+        });
+
+        const clearAll = document.createElement('button');
+        clearAll.className = 'clear-all-btn';
+        clearAll.textContent = 'clear all';
+        clearAll.onclick = clearAllFilters;
+        bar.appendChild(clearAll);
+      }
+
+      // ── More filters toggle ───────────────────────────────────────────────
+      function toggleMore() {
+        const panel = document.getElementById('moreFilters');
+        const btn   = document.getElementById('toggleMoreBtn');
+        const open  = panel.classList.toggle('open');
+        btn.classList.toggle('open', open);
+        btn.textContent = open ? '− filters' : '+ filters';
       }
     </script>
   </body>

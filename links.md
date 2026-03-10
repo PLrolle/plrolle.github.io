@@ -1,6 +1,6 @@
 ---
 layout: links
-title: liens
-description: curation de liens — commons, numérique, politiques publiques
+title: Good reads
+description: "Critical links curation on the state of digital society — commons, AI, public policy, digital rights"
 permalink: /links.html
 ---
