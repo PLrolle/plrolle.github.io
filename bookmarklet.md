@@ -308,7 +308,21 @@ function updateBookmarklet() {
   document.getElementById('bookmarkletLink').href = 'javascript:' + encodeURIComponent(code);
 }
 
-document.getElementById('ghToken').addEventListener('input', updateBookmarklet);
-document.getElementById('ghRepo').addEventListener('input', updateBookmarklet);
+// Pre-fill from localStorage and save on input
+const savedToken = localStorage.getItem('ghToken');
+const savedRepo  = localStorage.getItem('ghRepo');
+if (savedToken) document.getElementById('ghToken').value = savedToken;
+if (savedRepo)  document.getElementById('ghRepo').value = savedRepo;
+
+function saveAndUpdate() {
+  const token = document.getElementById('ghToken').value.trim();
+  const repo  = document.getElementById('ghRepo').value.trim();
+  if (token) localStorage.setItem('ghToken', token); else localStorage.removeItem('ghToken');
+  if (repo)  localStorage.setItem('ghRepo', repo);
+  updateBookmarklet();
+}
+
+document.getElementById('ghToken').addEventListener('input', saveAndUpdate);
+document.getElementById('ghRepo').addEventListener('input', saveAndUpdate);
 updateBookmarklet();
 </script>
