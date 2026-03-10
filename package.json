@@ -4,7 +4,8 @@
   "description": "A super light personnal website based on [riggraz](https://github.com/riggraz)'s \"[no style, please](https://github.com/riggraz/no-style-please)\" theme.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "digest": "node scripts/digest.js"
   },
   "repository": {
     "type": "git",
