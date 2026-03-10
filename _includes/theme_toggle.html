@@ -1,0 +1,37 @@
+<style>
+  #theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.25rem;
+    cursor: pointer;
+    opacity: 0.25;
+    z-index: 9999;
+    font-family: monospace;
+    color: black;
+  }
+  #theme-toggle:hover { opacity: 0.9; }
+</style>
+<button id="theme-toggle" onclick="__toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">●</button>
+<script>
+  (function () {
+    var STORAGE_KEY = 'appearance';
+
+    // Remove early preload style and hand off to body[a] (SCSS takes over)
+    var preload = document.getElementById('__preload_dark');
+    if (preload) { preload.remove(); }
+
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) document.body.setAttribute('a', saved);
+
+    window.__toggleTheme = function () {
+      var next = document.body.getAttribute('a') === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('a', next);
+      localStorage.setItem(STORAGE_KEY, next);
+    };
+  })();
+</script>
