@@ -244,6 +244,27 @@
       }
       .talk-theme:hover { text-decoration: underline; }
 
+      /* ── Featured section ── */
+      .featured-section {
+        margin-bottom: 2rem;
+      }
+      .featured-label {
+        font-family: monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.45;
+        margin-bottom: 0.75rem;
+      }
+      .featured-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 600px) {
+        .featured-grid { grid-template-columns: 1fr; }
+      }
+
       /* ── No results ── */
       .no-results {
         padding: 2rem;
@@ -288,6 +309,42 @@
 
       {% assign talks_data = site.data.talks %}
       {% assign all_years = talks_data | map: "year" | uniq %}
+
+      <!-- ── Featured section ── -->
+      <div class="featured-section">
+        <div class="featured-label">// Selected</div>
+        <div class="featured-grid">
+          {% for entry in talks_data %}
+            {% if entry.featured %}
+              {% assign theme_str = entry.themes | join: ',' %}
+              <div class="talk-entry"
+                   data-category="{{ entry.category }}"
+                   data-themes="{{ theme_str }}">
+
+                <div class="talk-category">{{ entry.category }}</div>
+
+                <div class="talk-title">
+                  <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+                </div>
+
+                <div class="talk-meta">
+                  <span class="talk-org">{{ entry.organization }}</span>
+                  <span class="talk-date">{% if entry.month_label %}{{ entry.month_label }} · {% endif %}{{ entry.year }}</span>
+                </div>
+
+                {% if entry.themes.size > 0 %}
+                <div class="talk-themes">
+                  {% for theme in entry.themes %}
+                  <span class="talk-theme" onclick="filterTheme('{{ theme }}')">{{ theme }}</span>
+                  {% endfor %}
+                </div>
+                {% endif %}
+
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
 
       <!-- ── Filter toolbar ── -->
       <div class="filters-toolbar">

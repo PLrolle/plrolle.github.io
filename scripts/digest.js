@@ -131,7 +131,7 @@ async function main() {
   }
 
   // ── Build post ──
-  const title    = `Links — w.${String(wNum).padStart(2, '0')}, ${formatMonth(monday)} ${year}`;
+  const title    = `Weekly digest — w.${String(wNum).padStart(2, '0')}, ${formatMonth(monday)} ${year}`;
   const filename = `${isoDate(monday)}-links-w${String(wNum).padStart(2, '0')}-${year}.md`;
   const outPath  = path.join(postsDir, filename);
 
