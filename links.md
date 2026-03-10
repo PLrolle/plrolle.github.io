@@ -1,6 +1,6 @@
 ---
 layout: links
-title: Good reads
-description: "Critical links curation on the state of digital society — commons, AI, public policy, digital rights"
+title: /links
+description: "curated reads on tech"
 permalink: /links.html
 ---
