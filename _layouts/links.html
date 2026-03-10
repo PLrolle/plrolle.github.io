@@ -75,6 +75,25 @@
       }
       .tag-pill:hover { opacity: 0.7; }
 
+      .more-row-btn {
+        flex-shrink: 0;
+        align-self: flex-start;
+        background: none;
+        border: 1.5px dashed black;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        cursor: pointer;
+        white-space: nowrap;
+        opacity: 0.6;
+      }
+      .more-row-btn:hover { opacity: 1; }
+      .more-row-btn.open { border-style: solid; opacity: 1; }
+
+      #topicPills:not(.expanded) {
+        max-height: 2.2rem;
+        overflow: hidden;
+      }
 
       /* ── Active filters summary ── */
       .active-filters-bar {
@@ -363,6 +382,7 @@
             <button class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</button>
             {% endfor %}
           </div>
+          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleTopics()">+ more</button>
         </div>
         {% endif %}
 
@@ -570,7 +590,41 @@
         bar.appendChild(clearAll);
       }
 
-      function expandTopics() {} // no-op, kept for filterTag compatibility
+      // ── Topics expand / collapse ──────────────────────────────────────────
+      function toggleTopics() {
+        const pills = document.getElementById('topicPills');
+        const btn   = document.getElementById('topicMoreBtn');
+        const expanded = pills.classList.toggle('expanded');
+        btn.classList.toggle('open', expanded);
+        btn.textContent = expanded ? '− less' : '+ more';
+      }
+
+      function expandTopics() {
+        const pills = document.getElementById('topicPills');
+        const btn   = document.getElementById('topicMoreBtn');
+        if (pills && !pills.classList.contains('expanded')) {
+          pills.classList.add('expanded');
+          btn.classList.add('open');
+          btn.textContent = '− less';
+        }
+      }
+
+      // Hide "more" button when all pills fit in one row
+      function checkTopicsOverflow() {
+        const pills = document.getElementById('topicPills');
+        const btn   = document.getElementById('topicMoreBtn');
+        if (!pills || !btn) return;
+        // Temporarily remove max-height to measure real height
+        const wasExpanded = pills.classList.contains('expanded');
+        if (!wasExpanded) pills.classList.add('expanded');
+        const fullHeight = pills.scrollHeight;
+        if (!wasExpanded) pills.classList.remove('expanded');
+        const oneRowHeight = parseFloat(getComputedStyle(pills).lineHeight) * 1.8 || 35;
+        btn.style.display = fullHeight > oneRowHeight ? 'inline-block' : 'none';
+      }
+
+      window.addEventListener('resize', checkTopicsOverflow);
+      requestAnimationFrame(checkTopicsOverflow);
 
       // ── Admin mode (token in localStorage) ───────────────────────────────
       if (localStorage.getItem('ghToken')) {
