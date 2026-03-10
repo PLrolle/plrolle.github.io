@@ -240,7 +240,7 @@ const BOOKMARKLET_CODE = function(GITHUB_TOKEN, GITHUB_REPO) {
       if (fileRes.ok) {
         const fd = await fileRes.json();
         sha = fd.sha;
-        links = JSON.parse(atob(fd.content.replace(/\n/g,'')));
+        links = JSON.parse(decodeURIComponent(escape(atob(fd.content.replace(/\n/g,'')))));
       }
 
       links.unshift({
