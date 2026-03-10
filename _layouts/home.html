@@ -50,8 +50,6 @@ layout: default
   {%-endif-%}
 </header>
 
-{%-include menu_item.html collection=site.data.menu.entries-%}
-
 <div class="home-ctas">
   <a href="{{ '/links.html' | relative_url }}" class="home-cta">
     <span class="home-cta-title">/links</span>
@@ -62,6 +60,8 @@ layout: default
     <span class="home-cta-desc">Selected appearances, interviews and press mentions</span>
   </a>
 </div>
+
+{%-include menu_item.html collection=site.data.menu.entries-%}
 
 <hr>
 
