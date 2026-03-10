@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" {{ site.theme_config.appearance | default: 'auto' | prepend: 'a="' | append: '"' }}>
+  <head>
+    {% include head.html %}
+    <style>
+      /* ── Page header ── */
+      .page-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.6;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+      }
+
+      /* ── Filter toolbar ── */
+      .filters-toolbar {
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+        min-width: 0;
+      }
+      .filter-row-label {
+        font-family: monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.45;
+        white-space: nowrap;
+        flex-shrink: 0;
+        width: 4.5rem;
+      }
+      .filter-row-pills {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+      }
+
+      .cat-pill {
+        flex-shrink: 0;
+        background: white;
+        color: black;
+        border: 1.5px solid black;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.1s;
+      }
+      .cat-pill:hover { background: #eee; }
+      .cat-pill.active { background: black; color: white; }
+
+      .tag-pill {
+        flex-shrink: 0;
+        background: black;
+        color: white;
+        padding: 0.15rem 0.45rem;
+        cursor: pointer;
+        font-family: monospace;
+        font-size: 0.75rem;
+        border: none;
+        white-space: nowrap;
+      }
+      .tag-pill.active {
+        outline: 2px solid black;
+        background: white;
+        color: black;
+      }
+      .tag-pill:hover { opacity: 0.7; }
+
+      /* ── Active filters summary ── */
+      .active-filters-bar {
+        display: none;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.6rem;
+        font-size: 0.8rem;
+      }
+      .active-filters-bar.visible { display: flex; }
+      .active-filter-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.1rem 0.4rem;
+        font-family: monospace;
+        font-size: 0.75rem;
+      }
+      .active-filter-chip.is-type {
+        background: white;
+        color: black;
+        border: 1.5px solid black;
+      }
+      .active-filter-chip.is-type button { color: black; }
+      .active-filter-chip.is-theme {
+        background: black;
+        color: white;
+      }
+      .active-filter-chip.is-theme button { color: white; }
+      .active-filter-chip button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0;
+        line-height: 1;
+      }
+      .clear-all-btn {
+        font-family: monospace;
+        font-size: 0.75rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: underline;
+        opacity: 0.6;
+      }
+      .clear-all-btn:hover { opacity: 1; }
+
+      /* ── Dark mode ── */
+      @media (prefers-color-scheme: dark) {
+        .cat-pill { background: black; color: white; border-color: white; }
+        .cat-pill:hover { background: #222; }
+        .cat-pill.active { background: white; color: black; }
+        .tag-pill { background: white; color: black; }
+        .tag-pill.active { outline-color: white; background: black; color: white; }
+
+        .active-filter-chip.is-type { background: black; color: white; border-color: white; }
+        .active-filter-chip.is-type button { color: white; }
+        .active-filter-chip.is-theme { background: white; color: black; }
+        .active-filter-chip.is-theme button { color: black; }
+      }
+
+      /* ── Count ── */
+      .talks-count {
+        font-size: 0.8rem;
+        margin: 0.75rem 0 1.25rem;
+        opacity: 0.55;
+      }
+
+      /* ── Year groups ── */
+      .year-group { margin-bottom: 2.5rem; }
+
+      .year-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .year-rule {
+        flex: 1;
+        height: 1px;
+        background: black;
+        opacity: 0.15;
+      }
+      .year-label {
+        font-family: monospace;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.45;
+        white-space: nowrap;
+      }
+
+      /* ── Talk entries ── */
+      .talk-entry {
+        border: 2px solid black;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        position: relative;
+      }
+      .talk-entry:hover {
+        background: black;
+        color: white;
+      }
+      .talk-entry:hover a { color: white; }
+      .talk-entry:hover .talk-category { opacity: 0.8; }
+      .talk-entry:hover .talk-theme { background: white; color: black; }
+      .talk-entry:hover .talk-org { opacity: 0.8; }
+
+      .talk-category {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.5;
+        margin-bottom: 0.35rem;
+      }
+
+      .talk-title {
+        font-weight: bold;
+        font-size: 1rem;
+        line-height: 1.35;
+        margin-bottom: 0.5rem;
+      }
+      .talk-title a {
+        text-decoration: none;
+        border-bottom: 1px solid black;
+      }
+
+      .talk-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.6rem;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .talk-org {
+        font-size: 0.82rem;
+        opacity: 0.6;
+        font-family: monospace;
+      }
+
+      .talk-date {
+        font-size: 0.78rem;
+        opacity: 0.45;
+        font-family: monospace;
+        white-space: nowrap;
+      }
+
+      .talk-themes {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+      .talk-theme {
+        background: black;
+        color: white;
+        padding: 0 0.3rem;
+        font-size: 0.72rem;
+        font-family: monospace;
+        cursor: pointer;
+      }
+      .talk-theme:hover { text-decoration: underline; }
+
+      /* ── Featured section ── */
+      .featured-section {
+        margin-bottom: 2rem;
+      }
+      .featured-label {
+        font-family: monospace;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.45;
+        margin-bottom: 0.75rem;
+      }
+      .featured-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      @media (max-width: 600px) {
+        .featured-grid { grid-template-columns: 1fr; }
+      }
+
+      /* ── No results ── */
+      .no-results {
+        padding: 2rem;
+        border: 1px dashed black;
+        text-align: center;
+        display: none;
+        opacity: 0.6;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+
+      /* ── Mobile ── */
+      @media (max-width: 600px) {
+        .filter-row-label { width: 3.5rem; }
+        .talk-meta { flex-direction: column; align-items: flex-start; }
+      }
+
+      /* ── Dark mode entry ── */
+      @media (prefers-color-scheme: dark) {
+        .year-rule { background: white; }
+        .talk-entry { border-color: white; }
+        .talk-entry:hover { background: white; color: black; }
+        .talk-entry:hover a { color: black; }
+        .talk-entry:hover .talk-theme { background: black; color: white; }
+        .talk-title a { border-bottom-color: white; }
+        .talk-theme { background: white; color: black; }
+        .no-results { border-color: white; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="w">
+      {% include back_link.html %}
+
+      <h1>{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="page-subtitle">{{ page.description }}</p>
+      {% endif %}
+
+      <hr>
+
+      {% assign talks_data = site.data.talks %}
+      {% assign all_years = talks_data | map: "year" | uniq %}
+
+      <!-- ── Featured section ── -->
+      <div class="featured-section">
+        <div class="featured-label">// Selected</div>
+        <div class="featured-grid">
+          {% for entry in talks_data %}
+            {% if entry.featured %}
+              {% assign theme_str = entry.themes | join: ',' %}
+              <div class="talk-entry"
+                   data-category="{{ entry.category }}"
+                   data-themes="{{ theme_str }}">
+
+                <div class="talk-category">{{ entry.category }}</div>
+
+                <div class="talk-title">
+                  <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+                </div>
+
+                <div class="talk-meta">
+                  <span class="talk-org">{{ entry.organization }}</span>
+                  <span class="talk-date">{% if entry.month_label %}{{ entry.month_label }} · {% endif %}{{ entry.year }}</span>
+                </div>
+
+                {% if entry.themes.size > 0 %}
+                <div class="talk-themes">
+                  {% for theme in entry.themes %}
+                  <span class="talk-theme" onclick="filterTheme('{{ theme }}')">{{ theme }}</span>
+                  {% endfor %}
+                </div>
+                {% endif %}
+
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- ── Filter toolbar ── -->
+      <div class="filters-toolbar">
+
+        <!-- Type row -->
+        <div class="filter-row">
+          <span class="filter-row-label">Type</span>
+          <div class="filter-row-pills" id="typePills">
+            <button class="cat-pill active" data-cat="all" onclick="filterType('all')">All</button>
+            <button class="cat-pill" data-cat="talks" onclick="filterType('talks')">Talks</button>
+            <button class="cat-pill" data-cat="interviews" onclick="filterType('interviews')">Interviews</button>
+            <button class="cat-pill" data-cat="press" onclick="filterType('press')">Press</button>
+            <button class="cat-pill" data-cat="official" onclick="filterType('official')">Official</button>
+          </div>
+        </div>
+
+        <!-- Themes row -->
+        <div class="filter-row">
+          <span class="filter-row-label">Themes</span>
+          <div class="filter-row-pills" id="themePills">
+            <button class="tag-pill" data-tag="inclusion" onclick="filterTheme('inclusion')">Inclusion</button>
+            <button class="tag-pill" data-tag="digital-commons" onclick="filterTheme('digital-commons')">Digital Commons</button>
+            <button class="tag-pill" data-tag="data" onclick="filterTheme('data')">Data</button>
+            <button class="tag-pill" data-tag="ai" onclick="filterTheme('ai')">AI</button>
+            <button class="tag-pill" data-tag="third-places" onclick="filterTheme('third-places')">Third Places</button>
+            <button class="tag-pill" data-tag="culture" onclick="filterTheme('culture')">Culture</button>
+            <button class="tag-pill" data-tag="open-source" onclick="filterTheme('open-source')">Open Source</button>
+            <button class="tag-pill" data-tag="civic-tech" onclick="filterTheme('civic-tech')">Civic Tech</button>
+          </div>
+        </div>
+
+        <div class="active-filters-bar" id="activeFiltersBar"></div>
+      </div>
+
+      <div class="talks-count" id="talksCount">{{ talks_data.size }} entries</div>
+
+      <!-- ── Feed grouped by year ── -->
+      <div class="talks-feed" id="talksFeed">
+
+        {% for year in all_years %}
+          <section class="year-group" data-year="{{ year }}">
+            <div class="year-header">
+              <div class="year-rule"></div>
+              <span class="year-label">{{ year }}</span>
+              <div class="year-rule"></div>
+            </div>
+
+            {% for entry in talks_data %}
+              {% if entry.year == year %}
+                {% assign theme_str = entry.themes | join: ',' %}
+                <div class="talk-entry"
+                     data-category="{{ entry.category }}"
+                     data-themes="{{ theme_str }}">
+
+                  <div class="talk-category">{{ entry.category }}</div>
+
+                  <div class="talk-title">
+                    <a href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+                  </div>
+
+                  <div class="talk-meta">
+                    <span class="talk-org">{{ entry.organization }}</span>
+                    <span class="talk-date">{% if entry.month_label %}{{ entry.month_label }} · {% endif %}{{ entry.year }}</span>
+                  </div>
+
+                  {% if entry.themes.size > 0 %}
+                  <div class="talk-themes">
+                    {% for theme in entry.themes %}
+                    <span class="talk-theme" onclick="filterTheme('{{ theme }}')">{{ theme }}</span>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+
+                </div>
+              {% endif %}
+            {% endfor %}
+
+          </section>
+        {% endfor %}
+
+      </div>
+
+      <div class="no-results" id="noResults">No entries match the current filters.</div>
+
+    </div>
+
+    {% include theme_toggle.html %}
+
+    <script>
+      // ── Theme labels ──────────────────────────────────────────────────────
+      const THEME_LABELS = {
+        'inclusion':      'Inclusion',
+        'digital-commons':'Digital Commons',
+        'data':           'Data',
+        'ai':             'AI',
+        'third-places':   'Third Places',
+        'culture':        'Culture',
+        'open-source':    'Open Source',
+        'civic-tech':     'Civic Tech'
+      };
+
+      const TYPE_LABELS = {
+        'talks':      'Talks',
+        'interviews': 'Interviews',
+        'press':      'Press',
+        'official':   'Official'
+      };
+
+      // Apply human-readable theme labels to entry badges
+      document.querySelectorAll('.talk-theme').forEach(el => {
+        const slug = el.dataset.tag || el.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+        const key  = el.textContent.trim();
+        if (THEME_LABELS[key]) el.textContent = THEME_LABELS[key];
+      });
+
+      // ── Filter state ─────────────────────────────────────────────────────
+      let activeType   = 'all';
+      let activeThemes = new Set();
+
+      // ── Core filter logic ─────────────────────────────────────────────────
+      function applyFilters() {
+        const entries = document.querySelectorAll('.talk-entry');
+        const groups  = document.querySelectorAll('.year-group');
+        const countEl = document.getElementById('talksCount');
+        const noRes   = document.getElementById('noResults');
+
+        let visible = 0;
+        entries.forEach(el => {
+          const cat    = el.dataset.category || '';
+          const themes = el.dataset.themes ? el.dataset.themes.split(',').filter(Boolean) : [];
+
+          const typeOk  = activeType === 'all' || cat === activeType;
+          const themeOk = activeThemes.size === 0 || themes.some(t => activeThemes.has(t));
+
+          const show = typeOk && themeOk;
+          el.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+
+        groups.forEach(group => {
+          const any = Array.from(group.querySelectorAll('.talk-entry'))
+                           .some(e => e.style.display !== 'none');
+          group.style.display = any ? '' : 'none';
+        });
+
+        countEl.textContent = visible + ' entr' + (visible !== 1 ? 'ies' : 'y');
+        noRes.style.display = visible === 0 ? 'block' : 'none';
+        updateActiveBar();
+      }
+
+      // ── Individual filter setters ─────────────────────────────────────────
+      function filterType(type) {
+        activeType = type;
+        document.querySelectorAll('.cat-pill').forEach(el => {
+          el.classList.toggle('active', el.dataset.cat === type);
+        });
+        applyFilters();
+      }
+
+      function filterTheme(theme) {
+        if (activeThemes.has(theme)) {
+          activeThemes.delete(theme);
+        } else {
+          activeThemes.add(theme);
+        }
+        document.querySelectorAll('.tag-pill').forEach(el => {
+          el.classList.toggle('active', activeThemes.has(el.dataset.tag));
+        });
+        applyFilters();
+      }
+
+      function clearAllFilters() {
+        activeType   = 'all';
+        activeThemes = new Set();
+        document.querySelectorAll('.cat-pill').forEach(el =>
+          el.classList.toggle('active', el.dataset.cat === 'all'));
+        document.querySelectorAll('.tag-pill').forEach(el => el.classList.remove('active'));
+        applyFilters();
+      }
+
+      // ── Active filters summary bar ────────────────────────────────────────
+      function updateActiveBar() {
+        const bar = document.getElementById('activeFiltersBar');
+        bar.innerHTML = '';
+        const chips = [];
+
+        if (activeType !== 'all') {
+          chips.push({ label: TYPE_LABELS[activeType] || activeType, type: 'type', clear: () => filterType('all') });
+        }
+        activeThemes.forEach(theme => {
+          chips.push({ label: THEME_LABELS[theme] || theme, type: 'theme', clear: () => filterTheme(theme) });
+        });
+
+        if (chips.length === 0) {
+          bar.classList.remove('visible');
+          return;
+        }
+        bar.classList.add('visible');
+
+        chips.forEach(chip => {
+          const el  = document.createElement('span');
+          el.className = 'active-filter-chip is-' + chip.type;
+          const btn = document.createElement('button');
+          btn.textContent = '×';
+          btn.onclick = chip.clear;
+          el.appendChild(document.createTextNode(chip.label));
+          el.appendChild(btn);
+          bar.appendChild(el);
+        });
+
+        const clearAll = document.createElement('button');
+        clearAll.className = 'clear-all-btn';
+        clearAll.textContent = 'clear all';
+        clearAll.onclick = clearAllFilters;
+        bar.appendChild(clearAll);
+      }
+    </script>
+  </body>
+</html>

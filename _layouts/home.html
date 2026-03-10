@@ -1,6 +1,48 @@
 ---
 layout: default
 ---
+<style>
+  /* ── CTA cards ── */
+  .home-ctas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0 1rem;
+  }
+  .home-cta {
+    border: 2px solid black;
+    padding: 0.85rem 1rem;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: background 0.1s;
+  }
+  .home-cta:hover { background: black; color: white; }
+  .home-cta-title {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .home-cta-desc {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    display: block;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .home-cta:hover .home-cta-desc { opacity: 0.85; }
+
+  @media (max-width: 520px) {
+    .home-ctas { grid-template-columns: 1fr; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .home-cta { border-color: white; }
+    .home-cta:hover { background: white; color: black; }
+  }
+</style>
+
 <header>
   <h1>{{ site.title }}</h1>
   {%-if site.theme_config.show_description-%}
@@ -9,5 +51,30 @@ layout: default
 </header>
 
 {%-include menu_item.html collection=site.data.menu.entries-%}
+
+<div class="home-ctas">
+  <a href="{{ '/links.html' | relative_url }}" class="home-cta">
+    <span class="home-cta-title">/links</span>
+    <span class="home-cta-desc">Picks on tech, power, and the public good</span>
+  </a>
+  <a href="{{ '/talks.html' | relative_url }}" class="home-cta">
+    <span class="home-cta-title">/talks &amp; press</span>
+    <span class="home-cta-desc">Selected appearances, interviews and press mentions</span>
+  </a>
+</div>
+
+<hr>
+
+{% assign posts = site.posts %}
+{% if posts.size > 0 %}
+  <ul>
+    {%- for post in posts -%}
+      <li>
+        <span>{{ post.date | date: site.theme_config.date_format }}</span>
+        <a href="{{ post.url | relative_url }}">{{ post.title | downcase }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{% endif %}
 
 {{ content }}
