@@ -50,8 +50,6 @@ layout: default
   {%-endif-%}
 </header>
 
-{%-include menu_item.html collection=site.data.menu.entries-%}
-
 <div class="home-ctas">
   <a href="{{ '/links.html' | relative_url }}" class="home-cta">
     <span class="home-cta-title">/links</span>
@@ -63,7 +61,16 @@ layout: default
   </a>
 </div>
 
+{%-include menu_item.html collection=site.data.menu.entries-%}
+
 <hr>
+
+<div class="home-ctas" style="margin-bottom: 0.5rem;">
+  <a href="{{ '/posts.html' | relative_url }}" class="home-cta">
+    <span class="home-cta-title">/posts</span>
+    <span class="home-cta-desc">Notes, digests and occasional longer pieces</span>
+  </a>
+</div>
 
 {% assign posts = site.posts %}
 {% if posts.size > 0 %}
