@@ -1,6 +1,6 @@
 ---
 layout: links
 title: /links
-description: "Against digital enclosure, one link at a time"
+description: "Picks on tech, power, and the public good"
 permalink: /links.html
 ---
