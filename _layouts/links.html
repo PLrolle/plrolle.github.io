@@ -613,9 +613,9 @@
         const pills = document.getElementById('topicPills');
         const btn   = document.getElementById('topicMoreBtn');
         if (!pills || !btn) return;
-        if (pills.classList.contains('expanded')) { btn.style.display = ''; return; }
+        if (pills.classList.contains('expanded')) { btn.style.display = 'inline-block'; return; }
         requestAnimationFrame(() => {
-          btn.style.display = pills.scrollHeight > pills.clientHeight + 2 ? '' : 'none';
+          btn.style.display = pills.scrollHeight > pills.clientHeight + 2 ? 'inline-block' : 'none';
         });
       }
 
