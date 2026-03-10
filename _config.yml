@@ -4,11 +4,15 @@ email: plrolle@pm.me # email of site's author
 url: https://plrolle.github.io # root address of the site
 baseurl:  # subpath of the site, e.g. "/blog" (leave it blank "" if you're site shouldn't use a subpath)
 description: > # description of the site (multiple lines allowed)
-  Digital inclusion and commons stuff
+  Pierre-Louis Rolle — Lead Expert in eGovernance, working on digital inclusion,
+  digital commons, and public technology policy.
 
 permalink: /:slug.html
 
 favicon: "logo.png" # name+extension of favicon (which must be put on the root folder)
+
+# Default social sharing image (used by jekyll-seo-tag for og:image / Twitter card)
+logo: "logo.png"
 # goat_counter: "yoursitename" # put your GoatCounter name if you want to use GoatCounter analytics
 
 remote_theme: riggraz/no-style-please # if you are using GitHub Pages, change it to remote_theme: riggraz/no-style-please
@@ -25,3 +29,4 @@ sass:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
