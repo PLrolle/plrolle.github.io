@@ -1,6 +1,6 @@
 ---
 layout: links
 title: /links
-description: "curated reads on tech"
+description: "Against digital enclosure, one link at a time"
 permalink: /links.html
 ---
