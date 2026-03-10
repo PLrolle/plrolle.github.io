@@ -19,6 +19,9 @@ entries:
   - title: liens
     url: links.html
 
+  - title: talks & press
+    url: talks.html
+
   - title: all posts
     post_list:
       limit: 5
