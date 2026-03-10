@@ -1,0 +1,19 @@
+{
+  "name": "plrolle.github.io",
+  "version": "1.0.0",
+  "description": "A super light personnal website based on [riggraz](https://github.com/riggraz)'s \"[no style, please](https://github.com/riggraz/no-style-please)\" theme.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:33379/git/PLrolle/plrolle.github.io"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0"
+  }
+}
