@@ -76,7 +76,6 @@
       .tag-pill:hover { opacity: 0.7; }
 
       .more-row-btn {
-        display: none;
         flex-shrink: 0;
         align-self: flex-start;
         background: none;
@@ -89,7 +88,7 @@
         opacity: 0.6;
       }
       .more-row-btn:hover { opacity: 1; }
-      .more-row-btn.open { opacity: 1; border-style: solid; }
+      .more-row-btn.open { border-style: solid; opacity: 1; }
 
       #topicPills:not(.expanded) {
         max-height: 2.2rem;
@@ -383,7 +382,7 @@
             <button class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</button>
             {% endfor %}
           </div>
-          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleRowExpand('topicPills','topicMoreBtn')">+ filters</button>
+          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleTopics()">+ more</button>
         </div>
         {% endif %}
 
@@ -591,10 +590,10 @@
         bar.appendChild(clearAll);
       }
 
-      // ── Topics row expand / collapse ──────────────────────────────────────
-      function toggleRowExpand(pillsId, btnId) {
-        const pills = document.getElementById(pillsId);
-        const btn   = document.getElementById(btnId);
+      // ── Topics expand / collapse ──────────────────────────────────────────
+      function toggleTopics() {
+        const pills = document.getElementById('topicPills');
+        const btn   = document.getElementById('topicMoreBtn');
         const expanded = pills.classList.toggle('expanded');
         btn.classList.toggle('open', expanded);
         btn.textContent = expanded ? '− less' : '+ more';
@@ -605,22 +604,27 @@
         const btn   = document.getElementById('topicMoreBtn');
         if (pills && !pills.classList.contains('expanded')) {
           pills.classList.add('expanded');
-          if (btn) { btn.classList.add('open'); btn.textContent = '− less'; }
+          btn.classList.add('open');
+          btn.textContent = '− less';
         }
       }
 
+      // Hide "more" button when all pills fit in one row
       function checkTopicsOverflow() {
         const pills = document.getElementById('topicPills');
         const btn   = document.getElementById('topicMoreBtn');
         if (!pills || !btn) return;
-        if (pills.classList.contains('expanded')) { btn.style.display = 'inline-block'; return; }
-        requestAnimationFrame(() => {
-          btn.style.display = pills.scrollHeight > pills.clientHeight + 2 ? 'inline-block' : 'none';
-        });
+        // Temporarily remove max-height to measure real height
+        const wasExpanded = pills.classList.contains('expanded');
+        if (!wasExpanded) pills.classList.add('expanded');
+        const fullHeight = pills.scrollHeight;
+        if (!wasExpanded) pills.classList.remove('expanded');
+        const oneRowHeight = parseFloat(getComputedStyle(pills).lineHeight) * 1.8 || 35;
+        btn.style.display = fullHeight > oneRowHeight ? 'inline-block' : 'none';
       }
 
       window.addEventListener('resize', checkTopicsOverflow);
-      setTimeout(checkTopicsOverflow, 0);
+      requestAnimationFrame(checkTopicsOverflow);
 
       // ── Admin mode (token in localStorage) ───────────────────────────────
       if (localStorage.getItem('ghToken')) {
