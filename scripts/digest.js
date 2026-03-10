@@ -80,7 +80,7 @@ Here are this week's links:
 
 ${linksSummary}
 
-Write a 2-3 sentence intro that briefly contextualizes what connects these links this week. Be direct and analytical — no filler, no "this week we explore...". Write in English. Do not use bullet points or headers, just plain prose.`
+Write a 2 paragraphs intro that briefly contextualizes what connects these links this week. Be direct and analytical — no filler, no "this week we explore...". Write in English. Do not use bullet points or headers, just plain prose.`
     }]
   });
 
