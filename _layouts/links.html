@@ -75,26 +75,6 @@
       }
       .tag-pill:hover { opacity: 0.7; }
 
-      .more-row-btn {
-        flex-shrink: 0;
-        align-self: flex-start;
-        background: none;
-        border: 1.5px dashed black;
-        padding: 0.2rem 0.6rem;
-        font-size: 0.75rem;
-        font-family: monospace;
-        cursor: pointer;
-        white-space: nowrap;
-        opacity: 0.6;
-      }
-      .more-row-btn:hover { opacity: 1; }
-      .more-row-btn.open { border-style: solid; opacity: 1; }
-
-      #topicPills:not(.expanded) {
-        max-height: 2.2rem;
-        overflow: hidden;
-      }
-
       /* ── Active filters summary ── */
       .active-filters-bar {
         display: none;
@@ -150,7 +130,7 @@
         .cat-pill.active { background: white; color: black; }
         .tag-pill { background: white; color: black; }
         .tag-pill.active { outline-color: white; background: black; color: white; }
-        .more-row-btn { border-color: white; color: white; }
+
         .active-filter-chip.is-medium { background: black; color: white; border-color: white; }
         .active-filter-chip.is-medium button { color: white; }
         .active-filter-chip.is-topic { background: white; color: black; }
@@ -382,7 +362,7 @@
             <button class="tag-pill" data-tag="{{ tag }}" onclick="filterTag('{{ tag }}')">#{{ tag }}</button>
             {% endfor %}
           </div>
-          <button class="more-row-btn" id="topicMoreBtn" onclick="toggleTopics()">+ more</button>
+
         </div>
         {% endif %}
 
@@ -536,7 +516,6 @@
           activeTags.delete(tag);
         } else {
           activeTags.add(tag);
-          expandTopics();
         }
         document.querySelectorAll('.tag-pill').forEach(el => {
           el.classList.toggle('active', activeTags.has(el.dataset.tag));
@@ -589,42 +568,6 @@
         clearAll.onclick = clearAllFilters;
         bar.appendChild(clearAll);
       }
-
-      // ── Topics expand / collapse ──────────────────────────────────────────
-      function toggleTopics() {
-        const pills = document.getElementById('topicPills');
-        const btn   = document.getElementById('topicMoreBtn');
-        const expanded = pills.classList.toggle('expanded');
-        btn.classList.toggle('open', expanded);
-        btn.textContent = expanded ? '− less' : '+ more';
-      }
-
-      function expandTopics() {
-        const pills = document.getElementById('topicPills');
-        const btn   = document.getElementById('topicMoreBtn');
-        if (pills && !pills.classList.contains('expanded')) {
-          pills.classList.add('expanded');
-          btn.classList.add('open');
-          btn.textContent = '− less';
-        }
-      }
-
-      // Hide "more" button when all pills fit in one row
-      function checkTopicsOverflow() {
-        const pills = document.getElementById('topicPills');
-        const btn   = document.getElementById('topicMoreBtn');
-        if (!pills || !btn) return;
-        // Temporarily remove max-height to measure real height
-        const wasExpanded = pills.classList.contains('expanded');
-        if (!wasExpanded) pills.classList.add('expanded');
-        const fullHeight = pills.scrollHeight;
-        if (!wasExpanded) pills.classList.remove('expanded');
-        const oneRowHeight = parseFloat(getComputedStyle(pills).lineHeight) * 1.8 || 35;
-        btn.style.display = fullHeight > oneRowHeight ? 'inline-block' : 'none';
-      }
-
-      window.addEventListener('resize', checkTopicsOverflow);
-      requestAnimationFrame(checkTopicsOverflow);
 
       // ── Admin mode (token in localStorage) ───────────────────────────────
       if (localStorage.getItem('ghToken')) {
