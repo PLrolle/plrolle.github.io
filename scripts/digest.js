@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/opt/node22/bin/node
 // Usage:
 //   node scripts/digest.js           → current week (AI intro if ANTHROPIC_API_KEY set)
 //   node scripts/digest.js 2026-03-10 → week containing that date
