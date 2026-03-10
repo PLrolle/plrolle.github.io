@@ -324,7 +324,7 @@
     "title": "« Mettre fin au désencastrement entre numérique et politique publique »",
     "organization": "Autrement Autrement",
     "url": "https://autrementautrement.com/2021/04/16/mettre-fin-au-desencastrement-entre-numerique-et-politique-publique/",
-    "themes": ["digital-commons", "civic-tech", "open-source"]
+    "themes": ["inclusion", "digital-commons", "civic-tech", "open-source"]
   },
   {
     "id": "pep-2021",
@@ -394,10 +394,10 @@
     "featured": true,
     "category": "talks",
     "country": "united-states",
-    "title": "World Bank Law, Justice and Development Week 2019 — Challenges of Digital Access to Rights (Washington DC)",
-    "organization": "World Bank, Washington DC",
+    "title": "World Bank Law, Justice and Development Week 2019 — Challenges of Digital Access to Rights",
+    "organization": "World Bank",
     "url": "https://thedocs.worldbank.org/en/doc/989251567783540808-0260022019/render/LJDWeek2019DraftAgenda.pdf",
-    "themes": ["inclusion", "civic-tech"]
+    "themes": ["inclusion"]
   },
   {
     "id": "eole-2019",
