@@ -6,10 +6,9 @@ on:
     - cron: '0 8 * * 1'
   workflow_dispatch:
     inputs:
-      week_offset:
-        description: 'Week offset (0 = current, 1 = last week)'
+      date:
+        description: 'Any date within the target week (YYYY-MM-DD, defaults to last week)'
         required: false
-        default: '0'
 
 jobs:
   digest:
@@ -21,19 +20,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
+          node-version: '22'
 
       - name: Install dependencies
-        run: pip install anthropic python-dateutil
+        run: npm ci
 
       - name: Generate digest
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          WEEK_OFFSET: ${{ github.event.inputs.week_offset || '0' }}
-        run: python3 .github/scripts/generate_digest.py
+        run: |
+          TARGET_DATE="${{ github.event.inputs.date }}"
+          if [ -z "$TARGET_DATE" ]; then
+            # Default: yesterday = Sunday = last week
+            TARGET_DATE=$(date -d "yesterday" +%Y-%m-%d)
+          fi
+          node scripts/digest.js "$TARGET_DATE"
 
       - name: Commit and push digest
         run: |
