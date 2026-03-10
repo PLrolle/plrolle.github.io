@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'fr' }}" {{ site.theme_config.appearance | default: 'auto' | prepend: 'a="' | append: '"' }}>
+  <head>
+    {% include head.html %}
+    <style>
+      .links-feed {
+        margin-top: 2rem;
+      }
+
+      .link-entry {
+        border: 2px solid black;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+      }
+
+      .link-entry:hover {
+        background: black;
+        color: white;
+      }
+
+      .link-entry:hover a {
+        color: white;
+      }
+
+      .link-entry:hover .link-source {
+        color: white;
+      }
+
+      .link-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .link-favicon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        image-rendering: pixelated;
+      }
+
+      .link-title {
+        font-weight: bold;
+        font-size: 1rem;
+        line-height: 1.3;
+      }
+
+      .link-title a {
+        text-decoration: none;
+        border-bottom: 1px solid black;
+      }
+
+      .link-title a:hover {
+        text-decoration: none;
+      }
+
+      .link-summary {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .link-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .link-source {
+        opacity: 0.7;
+      }
+
+      .link-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .link-tag {
+        background: black;
+        color: white;
+        padding: 0 0.3rem;
+        font-size: 0.75rem;
+        text-decoration: none;
+        font-family: monospace;
+      }
+
+      .link-entry:hover .link-tag {
+        background: white;
+        color: black;
+      }
+
+      .link-tag:hover {
+        text-decoration: underline;
+      }
+
+      .tag-filter {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        border: 1px solid black;
+        font-size: 0.85rem;
+      }
+
+      .tag-filter-title {
+        margin: 0 0 0.5rem 0;
+        font-weight: bold;
+      }
+
+      .tag-filter-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tag-filter-item {
+        display: inline-block;
+        background: black;
+        color: white;
+        padding: 0.1rem 0.4rem;
+        cursor: pointer;
+        font-family: monospace;
+        font-size: 0.8rem;
+      }
+
+      .tag-filter-item.active {
+        outline: 2px solid black;
+        background: white;
+        color: black;
+      }
+
+      .tag-filter-item:hover {
+        opacity: 0.7;
+      }
+
+      .links-count {
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+        opacity: 0.6;
+      }
+
+      .no-results {
+        padding: 2rem;
+        border: 1px solid black;
+        text-align: center;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="w">
+      {% include back_link.html %}
+
+      <h1>{{ page.title }}</h1>
+
+      {% if page.description %}
+        <p>{{ page.description }}</p>
+      {% endif %}
+
+      <hr>
+
+      {% assign all_links = site.data.links | sort: "date" | reverse %}
+      {% assign all_tags = "" | split: "" %}
+      {% for link in all_links %}
+        {% for tag in link.tags %}
+          {% unless all_tags contains tag %}
+            {% assign all_tags = all_tags | push: tag %}
+          {% endunless %}
+        {% endfor %}
+      {% endfor %}
+      {% assign all_tags = all_tags | sort %}
+
+      {% if all_tags.size > 0 %}
+      <div class="tag-filter">
+        <p class="tag-filter-title">filtrer par tag :</p>
+        <ul class="tag-filter-list" id="tagFilters">
+          {% for tag in all_tags %}
+          <li class="tag-filter-item" data-tag="{{ tag }}" onclick="filterByTag('{{ tag }}')">{{ tag }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="links-count" id="linksCount">{{ all_links.size }} lien{% if all_links.size > 1 %}s{% endif %}</div>
+
+      <div class="links-feed" id="linksFeed">
+        {% for link in all_links %}
+        <div class="link-entry" data-tags="{{ link.tags | join: ',' }}">
+          <div class="link-header">
+            {% if link.source_favicon %}
+            <img class="link-favicon" src="{{ link.source_favicon }}" alt="" loading="lazy">
+            {% endif %}
+            <div class="link-title">
+              <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title }}</a>
+            </div>
+          </div>
+
+          {% if link.summary %}
+          <p class="link-summary">{{ link.summary }}</p>
+          {% endif %}
+
+          <div class="link-meta">
+            <span class="link-source">{{ link.date }} — {{ link.source_name }}</span>
+            {% if link.tags.size > 0 %}
+            <div class="link-tags">
+              {% for tag in link.tags %}
+              <span class="link-tag" onclick="filterByTag('{{ tag }}')" style="cursor:pointer">#{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="no-results" id="noResults">aucun lien pour ce tag.</div>
+
+    </div>
+
+    <script>
+      let activeTag = null;
+
+      function filterByTag(tag) {
+        const entries = document.querySelectorAll('.link-entry');
+        const filterItems = document.querySelectorAll('.tag-filter-item');
+        const countEl = document.getElementById('linksCount');
+        const noResults = document.getElementById('noResults');
+
+        if (activeTag === tag) {
+          activeTag = null;
+          filterItems.forEach(el => el.classList.remove('active'));
+          entries.forEach(el => el.style.display = '');
+          const total = entries.length;
+          countEl.textContent = total + ' lien' + (total > 1 ? 's' : '');
+          noResults.style.display = 'none';
+          return;
+        }
+
+        activeTag = tag;
+        filterItems.forEach(el => {
+          el.classList.toggle('active', el.dataset.tag === tag);
+        });
+
+        let visible = 0;
+        entries.forEach(el => {
+          const tags = el.dataset.tags ? el.dataset.tags.split(',') : [];
+          const show = tags.includes(tag);
+          el.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+
+        countEl.textContent = visible + ' lien' + (visible > 1 ? 's' : '') + ' — tag : #' + tag;
+        noResults.style.display = visible === 0 ? 'block' : 'none';
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>link curator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: monospace;
+      font-size: 13px;
+      background: white;
+      color: black;
+      width: 340px;
+    }
+
+    .header {
+      background: black;
+      color: white;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .container { padding: 0.8rem; }
+
+    .url-preview {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 0.7rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+
+    .field { margin-bottom: 0.7rem; }
+
+    label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      font-family: monospace;
+      font-size: 12px;
+      border: 1px solid black;
+      padding: 0.3rem 0.4rem;
+      background: white;
+      color: black;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: 2px solid black;
+      outline-offset: -1px;
+    }
+
+    textarea { min-height: 60px; max-height: 100px; }
+
+    .tags-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      border: 1px solid black;
+      padding: 0.3rem;
+      min-height: 2rem;
+      cursor: text;
+      background: white;
+    }
+
+    .tag-chip {
+      background: black;
+      color: white;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .tag-chip button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .tags-text-input {
+      border: none;
+      outline: none;
+      font-family: monospace;
+      font-size: 12px;
+      flex: 1;
+      min-width: 80px;
+      background: transparent;
+    }
+
+    button.primary {
+      width: 100%;
+      background: black;
+      color: white;
+      border: none;
+      padding: 0.55rem;
+      font-family: monospace;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.3rem;
+    }
+
+    button.primary:hover { opacity: 0.8; }
+    button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .status {
+      margin-top: 0.5rem;
+      padding: 0.4rem;
+      font-size: 0.75rem;
+      border: 1px solid black;
+      display: none;
+    }
+
+    .status.ok { background: black; color: white; }
+
+    .settings-toggle {
+      font-size: 0.7rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: monospace;
+      padding: 0;
+      margin-top: 0.5rem;
+      display: block;
+      color: black;
+    }
+
+    .settings-panel {
+      display: none;
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid black;
+    }
+
+    .og-preview {
+      display: none;
+      margin-bottom: 0.7rem;
+    }
+
+    .og-preview img {
+      width: 100%;
+      max-height: 80px;
+      object-fit: cover;
+      border: 1px solid black;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">/// link curator</div>
+  <div class="container">
+
+    <div class="url-preview" id="urlPreview">chargement...</div>
+
+    <div class="og-preview" id="ogPreview">
+      <img id="ogImage" src="" alt="">
+    </div>
+
+    <div class="field">
+      <label>titre</label>
+      <input type="text" id="title" placeholder="titre de la page">
+    </div>
+
+    <div class="field">
+      <label>description (OpenGraph)</label>
+      <textarea id="summary" placeholder="description automatique..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>tags (Entrée pour valider)</label>
+      <div class="tags-input" id="tagsContainer" onclick="focusTagInput()">
+        <input class="tags-text-input" id="tagInput" placeholder="ex: commons, ia, politique..."
+               onkeydown="handleTagInput(event)">
+      </div>
+    </div>
+
+    <button class="primary" id="btnSave" onclick="saveLink()">+ sauvegarder</button>
+    <div class="status" id="status"></div>
+
+    <button class="settings-toggle" onclick="toggleSettings()">⚙ config</button>
+    <div class="settings-panel" id="settingsPanel">
+      <div class="field">
+        <label>token GitHub (scope: contents)</label>
+        <input type="text" id="githubToken" placeholder="ghp_...">
+      </div>
+      <div class="field">
+        <label>repo (user/repo)</label>
+        <input type="text" id="githubRepo" placeholder="plrolle/plrolle.github.io">
+      </div>
+      <button class="primary" onclick="saveSettings()">enregistrer</button>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
