@@ -333,7 +333,7 @@
 
       <hr>
 
-      {% assign sorted_links = site.data.links | sort: "date" | reverse %}
+      {% assign sorted_links = site.data.links | sort: "added_at" | reverse %}
 
       {% assign all_tags = "" | split: "" %}
       {% assign all_categories = "" | split: "" %}
