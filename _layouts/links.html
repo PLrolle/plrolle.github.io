@@ -192,7 +192,26 @@
         border: 2px solid black;
         margin-bottom: 1rem;
         padding: 1rem;
+        position: relative;
       }
+
+      .link-delete {
+        display: none;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.6rem;
+        background: none;
+        border: none;
+        font-family: monospace;
+        font-size: 0.8rem;
+        cursor: pointer;
+        opacity: 0.35;
+        color: inherit;
+        padding: 0;
+        line-height: 1;
+      }
+      .link-delete:hover { opacity: 1; }
+      body.is-admin .link-entry:hover .link-delete { display: block; }
       .link-entry:hover {
         background: black;
         color: white;
@@ -403,10 +422,14 @@
           {% endif %}
 
           <div class="link-entry"
+               data-id="{{ link.id }}"
+               data-title="{{ link.title | escape }}"
                data-tags="{{ link.tags | join: ',' }}"
                data-category="{{ link.category | default: '' }}"
                data-period="{{ link_period }}"
                data-week="{{ link_week }}">
+
+            <button class="link-delete" onclick="deleteLink(this)" title="delete">×</button>
 
             {% if link.category %}
             <div class="link-category cat-label-{{ link.category }}">{{ link.category }}</div>
@@ -599,6 +622,61 @@
         const open  = panel.classList.toggle('open');
         btn.classList.toggle('open', open);
         btn.textContent = open ? '− filters' : '+ filters';
+      }
+
+      // ── Admin mode (token in localStorage) ───────────────────────────────
+      if (localStorage.getItem('ghToken')) {
+        document.body.classList.add('is-admin');
+      }
+
+      // ── Delete link ───────────────────────────────────────────────────────
+      async function deleteLink(btn) {
+        const entry = btn.closest('.link-entry');
+        const id    = entry.dataset.id;
+        const title = entry.dataset.title;
+        if (!confirm('Delete "' + title + '"?')) return;
+
+        const token = localStorage.getItem('ghToken');
+        const repo  = localStorage.getItem('ghRepo') || 'plrolle/plrolle.github.io';
+
+        btn.textContent = '…';
+        btn.disabled = true;
+
+        try {
+          const fileRes = await fetch(
+            'https://api.github.com/repos/' + repo + '/contents/_data/links.json',
+            { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' } }
+          );
+          const fd    = await fileRes.json();
+          const links = JSON.parse(decodeURIComponent(escape(atob(fd.content.replace(/\n/g,'')))));
+          const updated = links.filter(l => l.id !== id);
+
+          const putRes = await fetch(
+            'https://api.github.com/repos/' + repo + '/contents/_data/links.json',
+            {
+              method: 'PUT',
+              headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: 'remove link: ' + title,
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2)))),
+                sha: fd.sha
+              })
+            }
+          );
+          if (!putRes.ok) { const e = await putRes.json(); throw new Error(e.message); }
+
+          const group = entry.closest('.week-group');
+          entry.remove();
+          if (group && !group.querySelector('.link-entry')) group.remove();
+
+          const remaining = document.querySelectorAll('.link-entry').length;
+          document.getElementById('linksCount').textContent = remaining + ' link' + (remaining !== 1 ? 's' : '');
+
+        } catch(e) {
+          alert('Error: ' + e.message);
+          btn.textContent = '×';
+          btn.disabled = false;
+        }
       }
     </script>
   </body>
