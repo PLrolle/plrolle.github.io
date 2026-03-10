@@ -4,27 +4,17 @@
 entries:
   - title: about
     entries:
-      - title: I co-founded the consultancy collective <a href='https://www.plurall.cc'>PLURALL.CC</a>.
-      - title: I work on policy strategy, digital skills & inclusion, digital infrastructures & public goods.  
+      - title: I work on policy strategy, digital skills & inclusion, digital infrastructures & public goods.
       - title: Currently based in Kigali, Rwanda. <span class="ioda">🇷🇼</span>
       - title: Linkedin profile.
         url: https://www.linkedin.com/in/pierrelouisrolle/?locale=en_US
       - title: "You can reach me by <a href='mailto:plrolle@pm.me'>mail</a> or <a href='https://cal.com/prolle/30min'>book directly a meeting</a>."
 
-  - title: last two positions
+  - title: current position
+    entries:
+      - title: "Lead Expert, eGovernance and Digital Public Infrastructure — EU × East African Community, Expertise France (2025–...)"
+
+  - title: previous positions
     entries:
       - title: Advisor to the Minister for Digital Affairs of France (2023-2024)
       - title: Director for Digital Strategy and Innovation, National Agency for Territorial Cohesion (2020-2023)
-
-  - title: liens
-    url: links.html
-
-  - title: talks & press
-    url: talks.html
-
-  - title: all posts
-    post_list:
-      limit: 5
-      show_more: true
-      show_more_text: See archive...
-      show_more_url: archive.html

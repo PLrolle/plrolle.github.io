@@ -195,7 +195,7 @@
     "title": "Contributions et commentaires — CNR Numérique (plateforme de concertation) — Inclusion numérique, conseillers numériques",
     "organization": "CNR Numérique / ANCT",
     "url": "https://cnr-numerique.anct.gouv.fr/profiles/pierre-louis_rolle/activity?locale=fr",
-    "themes": ["inclusion", "participation"]
+    "themes": ["inclusion", "civic-tech"]
   },
   {
     "id": "nec2022-pleniere",
@@ -305,7 +305,7 @@
     "title": "« Le numérique : outil de participation sociale ou renforcement des inégalités ? » — Rencontres PEP 2021",
     "organization": "Rencontres PEP 2021",
     "url": "https://www.lesrencontrespep.org/intervenants/pierre-louis-rolle/",
-    "themes": ["inclusion", "participation"]
+    "themes": ["inclusion", "civic-tech"]
   },
   {
     "id": "acteurspublics-cnum-2021",
@@ -352,6 +352,17 @@
     "themes": ["third-places", "inclusion"]
   },
   {
+    "id": "worldbank-2019",
+    "year": 2019,
+    "month_label": "Nov",
+    "sort_key": 201911,
+    "category": "talks",
+    "title": "World Bank Law, Justice and Development Week 2019 — Challenges of Digital Access to Rights (Washington DC)",
+    "organization": "World Bank, Washington DC",
+    "url": "https://thedocs.worldbank.org/en/doc/989251567783540808-0260022019/render/LJDWeek2019DraftAgenda.pdf",
+    "themes": ["inclusion", "civic-tech"]
+  },
+  {
     "id": "eole-2019",
     "year": 2019,
     "month_label": "Spring",
@@ -382,7 +393,7 @@
     "title": "COSCON 01 — « Political Representation in a Digital Age » (Tallinn) — Avec Marco Deseriis (Northeastern Univ.), Maija Jäske (Univ. Turku)",
     "organization": "Institut Français d'Estonie / CitizenOS",
     "url": "https://ife.ee/en/prda-video-debate/",
-    "themes": ["civic-tech", "participation"]
+    "themes": ["civic-tech"]
   },
   {
     "id": "tictec-2017",
@@ -393,7 +404,7 @@
     "title": "TICTeC@Taipei / CivicTechFest 2017 — « Digital Skills Training for Better Citizen Participation in France »",
     "organization": "TICTeC / mySociety / g0v.tw, Taipei",
     "url": "http://civictechfest.org/agenda",
-    "themes": ["civic-tech", "participation", "inclusion"]
+    "themes": ["civic-tech", "inclusion"]
   },
   {
     "id": "radioagora-2015",
@@ -404,6 +415,6 @@
     "title": "« Les outils numériques au service de la participation citoyenne » — Festival Nanterre Digital",
     "organization": "Radio Agora Nanterre",
     "url": "https://radioagora-nanterre.fr/broadcast/3612-Les-outils-num%C3%A9riques-au-service-de-la-participation-citoyenne",
-    "themes": ["civic-tech", "participation"]
+    "themes": ["civic-tech"]
   }
 ]
