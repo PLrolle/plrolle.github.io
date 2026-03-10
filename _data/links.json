@@ -1,12 +1,27 @@
 [
   {
+    "id": "mmkgberi",
+    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6254278",
+    "title": "'Generative Populism'. Infocracy and the Far-Right Embrace of AI-Imaging",
+    "summary": "Far-right populist parties have been particularly early adopters of new generative AI imaging tools. Beyond concerns raised about misinformation, 'sloppificatio",
+    "source_name": "papers.ssrn.com",
+    "source_favicon": "https://www.google.com/s2/favicons?domain=papers.ssrn.com&sz=32",
+    "date": "2026-03-10",
+    "tags": [
+      "artificial-intelligence"
+    ]
+  },
+  {
     "id": "example-001",
     "url": "https://plurall.cc",
-    "title": "PLURALL — Digital Commons",
-    "summary": "Site exemple pour tester le fil de curation. Remplacer ou supprimer cette entrée.",
+    "title": "PLURALL â Digital Commons",
+    "summary": "Site exemple pour tester le fil de curation. Remplacer ou supprimer cette entrÃ©e.",
     "source_name": "plurall.cc",
     "source_favicon": "https://www.google.com/s2/favicons?domain=plurall.cc&sz=32",
     "date": "2026-03-10",
-    "tags": ["commons", "digital"]
+    "tags": [
+      "commons",
+      "digital"
+    ]
   }
 ]
