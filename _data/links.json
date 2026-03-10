@@ -7,6 +7,7 @@
     "source_name": "papers.ssrn.com",
     "source_favicon": "https://www.google.com/s2/favicons?domain=papers.ssrn.com&sz=32",
     "date": "2026-03-10",
+    "category": "academic-paper",
     "tags": [
       "artificial-intelligence"
     ]
@@ -19,6 +20,7 @@
     "source_name": "plurall.cc",
     "source_favicon": "https://www.google.com/s2/favicons?domain=plurall.cc&sz=32",
     "date": "2026-03-10",
+    "category": "tool-project",
     "tags": [
       "commons",
       "digital"
