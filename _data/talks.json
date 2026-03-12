@@ -1,5 +1,29 @@
 [
   {
+    "id": "nec2024-commons-borders",
+    "year": 2024,
+    "month_label": "Sep",
+    "sort_key": 202409,
+    "category": "talks",
+    "country": "france",
+    "title": "How can we develop sustainable commons without borders?",
+    "organization": "Numérique en Commun[s], Chambéry",
+    "url": "https://numerique-en-communs.fr/wp-content/uploads/2025/02/livret-nec24_compressed.pdf",
+    "themes": ["digital-commons"]
+  },
+  {
+    "id": "nec2024-benin-open-data",
+    "year": 2024,
+    "month_label": "Sep",
+    "sort_key": 202409,
+    "category": "talks",
+    "country": "benin",
+    "title": "L'ouverture des données va-t-elle faire du Bénin le pionnier de la transformation numérique de l'Afrique de l'Ouest ?",
+    "organization": "Numérique en Commun[s], Chambéry",
+    "url": "https://numerique-en-communs.fr/wp-content/uploads/2025/02/livret-nec24_compressed.pdf",
+    "themes": ["data", "digital-commons"]
+  },
+  {
     "id": "ela-2025",
     "year": 2025,
     "month_label": "May",
