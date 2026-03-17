@@ -1,5 +1,20 @@
 [
   {
+    "id": "mmtz1lph",
+    "url": "https://www.nytimes.com/2026/03/12/magazine/ai-coding-programming-jobs-claude-chatgpt.html?smid=nytcore-ios-share",
+    "title": "Coding After Coders: The End of Computer Programming as We Know It",
+    "summary": "In the era of A.I. agents, many Silicon Valley programmers are now barely programming. Instead, what they’re doing is deeply, deeply weird.",
+    "source_name": "nytimes.com",
+    "source_favicon": "https://www.google.com/s2/favicons?domain=nytimes.com&sz=32",
+    "date": "2026-03-17",
+    "added_at": "2026-03-17T02:06:41.960Z",
+    "tags": [
+      "ai"
+    ],
+    "category": "journalism",
+    "comment": "btw this page was Claude-coded"
+  },
+  {
     "id": "mmtkvsjz",
     "url": "https://www.theguardian.com/world/2026/mar/16/norway-rails-against-enshittifcation-deliberate-tech-deterioration?CMP=Share_iOSApp_Other",
     "title": "‘Another internet is possible’: Norway rails against ‘enshittification’",
