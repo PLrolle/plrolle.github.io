@@ -1,13 +1,13 @@
-name: Weekly digest
+name: Bi-weekly digest
 
 on:
   schedule:
-    # Every Monday at 08:00 UTC
+    # Every Monday at 08:00 UTC — script skips odd weeks automatically
     - cron: '0 8 * * 1'
   workflow_dispatch:
     inputs:
       date:
-        description: 'Any date within the target week (YYYY-MM-DD, defaults to last week)'
+        description: 'Start date (any date, Monday of that week is used — YYYY-MM-DD)'
         required: false
 
 jobs:
@@ -15,34 +15,66 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
+      - name: Check if bi-weekly Monday (even ISO week)
+        id: check
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            TARGET_DATE="${{ github.event.inputs.date }}"
+          else
+            TARGET_DATE=$(date +%Y-%m-%d)
+          fi
+
+          WEEK=$(( 10#$(date -d "$TARGET_DATE" +%V) ))
+
+          # Always run on manual triggers; on schedule, only run on even weeks
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ $((WEEK % 2)) -eq 0 ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Odd week ($WEEK) — skipping."
+          fi
+
+          echo "date=$TARGET_DATE" >> $GITHUB_OUTPUT
+
       - name: Checkout
+        if: steps.check.outputs.skip != 'true'
         uses: actions/checkout@v4
 
       - name: Set up Node
+        if: steps.check.outputs.skip != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
       - name: Install dependencies
+        if: steps.check.outputs.skip != 'true'
         run: npm ci
 
       - name: Generate digest
+        if: steps.check.outputs.skip != 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          TARGET_DATE="${{ github.event.inputs.date }}"
-          if [ -z "$TARGET_DATE" ]; then
-            # Default: yesterday = Sunday = last week
-            TARGET_DATE=$(date -d "yesterday" +%Y-%m-%d)
-          fi
-          node scripts/digest.js "$TARGET_DATE"
+        run: node scripts/digest.js "${{ steps.check.outputs.date }}"
 
-      - name: Commit and push digest
+      - name: Open PR
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          BRANCH="digest/biweekly-${{ steps.check.outputs.date }}"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
           git add _posts/
-          git diff --cached --quiet || git commit -m "weekly digest $(date +%Y-%m-%d)"
-          git push
+          git commit -m "bi-weekly digest ${{ steps.check.outputs.date }}"
+          git push -u origin "$BRANCH"
+
+          gh pr create \
+            --title "Bi-weekly digest — ${{ steps.check.outputs.date }}" \
+            --body "Auto-generated bi-weekly digest. Review and edit if needed, then merge." \
+            --base main \
+            --head "$BRANCH"
