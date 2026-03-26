@@ -10,6 +10,9 @@ on:
         description: 'Start date (any date, Monday of that week is used — YYYY-MM-DD)'
         required: false
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   digest:
     runs-on: ubuntu-latest
