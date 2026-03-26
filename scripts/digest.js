@@ -86,7 +86,7 @@ async function generateDigest(links, startDate, endDate) {
     system:     systemPrompt,
     messages:   [{
       role:    'user',
-      content: `Here are the links to include in this bi-weekly digest (covering ${startDate} to ${endDate}):\n\n${linksList}\n\nProduce the digest now.`,
+      content: `Here are the links to include in this bi-weekly digest (covering ${isoDate(startDate)} to ${isoDate(endDate)}):\n\n${linksList}\n\nProduce the digest now.`,
     }],
   });
 
@@ -142,15 +142,17 @@ async function main() {
 
   const refDate  = dateArg ? new Date(dateArg) : new Date();
   const monday   = getMonday(refDate);
-  const endDate  = addDays(monday, 13); // 14-day window
+  // Digest published on Monday covers the 2 weeks that just ended (J-14 → J-1)
+  const endDate   = addDays(monday, -1);  // previous Sunday
+  const startDate = addDays(monday, -14); // 14 days back
 
   const periodLinks = links.filter(l => {
     const d = new Date(l.date);
-    return d >= monday && d <= endDate;
+    return d >= startDate && d <= endDate;
   });
 
   if (periodLinks.length === 0) {
-    console.error(`No links found for period ${isoDate(monday)} → ${isoDate(endDate)}`);
+    console.error(`No links found for period ${isoDate(startDate)} → ${isoDate(endDate)}`);
     process.exit(1);
   }
 
@@ -160,7 +162,7 @@ async function main() {
 
   if (!noAI && hasKey) {
     process.stdout.write('Generating digest with Claude... ');
-    content = await generateDigest(periodLinks, isoDate(monday), isoDate(endDate));
+    content = await generateDigest(periodLinks, startDate, endDate);
     console.log('done.');
   } else {
     if (!noAI && !hasKey) console.log('No ANTHROPIC_API_KEY — falling back to plain list.');
